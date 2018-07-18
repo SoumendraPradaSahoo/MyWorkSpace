@@ -1,0 +1,14 @@
+package testRunner;
+
+import org.junit.runner.RunWith;
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+
+public class CucumberRunner {
+	@RunWith(Cucumber.class)
+	@CucumberOptions(
+			features = {"Feature"},
+			glue={"stepDef"},
+			plugin= {"html:Target/Report"}
+			)
+}

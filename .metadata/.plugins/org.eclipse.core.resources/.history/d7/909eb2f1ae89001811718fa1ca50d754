@@ -1,0 +1,14 @@
+package testRunner;
+
+public class CucumberRunner {
+	@RunWith(Cucumber.class)
+	@CucumberOptions(
+			features = "Feature"
+			,glue={"stepDef"}
+			)
+	 
+	public class TestRunner {
+	 
+	}
+
+}

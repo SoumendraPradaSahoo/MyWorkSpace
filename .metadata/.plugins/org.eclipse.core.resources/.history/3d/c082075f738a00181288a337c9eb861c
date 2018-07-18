@@ -1,0 +1,16 @@
+package com;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FindWords {
+
+	public static void main(String[] args) {
+		String str = "InterviewInOpentextOnFriday";
+		char[] ch = str.toCharArray();
+		List<String> output = new ArrayList<String>;
+		
+
+	}
+
+}
