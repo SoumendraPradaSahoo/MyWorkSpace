@@ -1,275 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="2" passed="0" failed="2" skipped="0">
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2018-07-18T09:35:06Z" name="Suite" finished-at="2018-07-18T09:40:20Z" duration-ms="313673">
+  <suite started-at="2018-07-19T09:04:39Z" name="Suite" finished-at="2018-07-19T09:04:40Z" duration-ms="36">
     <groups>
     </groups>
-    <test started-at="2018-07-18T09:35:06Z" name="Test1" finished-at="2018-07-18T09:35:07Z" duration-ms="1263">
-      <class name="com.ParallelTest">
-        <test-method is-config="true" signature="beforeTest(java.lang.String)[pri:0, instance:com.ParallelTest@7bd4937b]" started-at="2018-07-18T09:35:06Z" name="beforeTest" finished-at="2018-07-18T09:35:06Z" duration-ms="34" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[Firefox]]>
-              </value>
-            </param>
-          </params>
+    <test started-at="2018-07-19T09:04:39Z" name="Test" finished-at="2018-07-19T09:04:40Z" duration-ms="36">
+      <class name="com.TestNGExecution">
+        <test-method is-config="true" signature="beforeSuite()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:39Z" name="beforeSuite" finished-at="2018-07-19T09:04:39Z" duration-ms="20" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeSuite -->
+        <test-method is-config="true" signature="beforeTest()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:39Z" name="beforeTest" finished-at="2018-07-19T09:04:39Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeTest -->
-        <test-method signature="f()[pri:0, instance:com.ParallelTest@7bd4937b]" started-at="2018-07-18T09:35:06Z" name="f" finished-at="2018-07-18T09:35:07Z" duration-ms="1105" status="FAIL">
-          <exception class="org.openqa.selenium.WebDriverException">
-            <message>
-              <![CDATA[Error forwarding the new session cannot find : Capabilities {browserName: firefox, marionette: false, platform: WIN10}
-Command duration or timeout: 157 milliseconds
-Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:32:19.891Z'
-System info: host: 'DXCINDAI694979', ip: '20.15.150.14', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '10.0.1'
-Driver info: driver.version: RemoteWebDriver]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.WebDriverException: Error forwarding the new session cannot find : Capabilities {browserName: firefox, marionette: false, platform: WIN10}
-Command duration or timeout: 157 milliseconds
-Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:32:19.891Z'
-System info: host: 'DXCINDAI694979', ip: '20.15.150.14', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '10.0.1'
-Driver info: driver.version: RemoteWebDriver
-at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
-at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
-at java.base/java.lang.reflect.Constructor.newInstance(Unknown Source)
-at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:214)
-at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:166)
-at org.openqa.selenium.remote.JsonWireProtocolResponse.lambda$new$0(JsonWireProtocolResponse.java:53)
-at org.openqa.selenium.remote.JsonWireProtocolResponse.lambda$getResponseFunction$2(JsonWireProtocolResponse.java:91)
-at org.openqa.selenium.remote.ProtocolHandshake.lambda$createSession$0(ProtocolHandshake.java:123)
-at java.base/java.util.stream.ReferencePipeline$3$1.accept(Unknown Source)
-at java.base/java.util.Spliterators$ArraySpliterator.tryAdvance(Unknown Source)
-at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(Unknown Source)
-at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(Unknown Source)
-at java.base/java.util.stream.AbstractPipeline.copyInto(Unknown Source)
-at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(Unknown Source)
-at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(Unknown Source)
-at java.base/java.util.stream.AbstractPipeline.evaluate(Unknown Source)
-at java.base/java.util.stream.ReferencePipeline.findFirst(Unknown Source)
-at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:126)
-at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:73)
-at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:136)
-at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)
-at org.openqa.selenium.remote.RemoteWebDriver.startSession(RemoteWebDriver.java:212)
-at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:130)
-at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:143)
-at com.ParallelTest.f(ParallelTest.java:22)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.base/java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
-at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-at org.testng.TestRunner.privateRun(TestRunner.java:648)
-at org.testng.TestRunner.run(TestRunner.java:505)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.access$000(SuiteRunner.java:40)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:489)
-at org.testng.internal.thread.ThreadUtil$1.call(ThreadUtil.java:52)
-at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.base/java.lang.Thread.run(Unknown Source)
-Caused by: org.openqa.grid.common.exception.GridException: Error forwarding the new session cannot find : Capabilities {browserName: firefox, marionette: false, platform: WIN10}
-at org.openqa.grid.web.servlet.handler.RequestHandler.process(RequestHandler.java:118)
-at org.openqa.grid.web.servlet.DriverServlet.process(DriverServlet.java:86)
-at org.openqa.grid.web.servlet.DriverServlet.doPost(DriverServlet.java:70)
-at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
-at javax.servlet.http.HttpServlet.service(HttpServlet.java:790)
-at org.seleniumhq.jetty9.servlet.ServletHolder.handle(ServletHolder.java:860)
-at org.seleniumhq.jetty9.servlet.ServletHandler.doHandle(ServletHandler.java:535)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.handle(ScopedHandler.java:143)
-at org.seleniumhq.jetty9.security.SecurityHandler.handle(SecurityHandler.java:548)
-at org.seleniumhq.jetty9.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:190)
-at org.seleniumhq.jetty9.server.session.SessionHandler.doHandle(SessionHandler.java:1595)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:188)
-at org.seleniumhq.jetty9.server.handler.ContextHandler.doHandle(ContextHandler.java:1253)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextScope(ScopedHandler.java:168)
-at org.seleniumhq.jetty9.servlet.ServletHandler.doScope(ServletHandler.java:473)
-at org.seleniumhq.jetty9.server.session.SessionHandler.doScope(SessionHandler.java:1564)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextScope(ScopedHandler.java:166)
-at org.seleniumhq.jetty9.server.handler.ContextHandler.doScope(ContextHandler.java:1155)
-at org.seleniumhq.jetty9.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
-at org.seleniumhq.jetty9.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132)
-at org.seleniumhq.jetty9.server.Server.handle(Server.java:530)
-at org.seleniumhq.jetty9.server.HttpChannel.handle(HttpChannel.java:347)
-at org.seleniumhq.jetty9.server.HttpConnection.onFillable(HttpConnection.java:256)
-at org.seleniumhq.jetty9.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:279)
-at org.seleniumhq.jetty9.io.FillInterest.fillable(FillInterest.java:102)
-at org.seleniumhq.jetty9.io.ChannelEndPoint$2.run(ChannelEndPoint.java:124)
-at org.seleniumhq.jetty9.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:247)
-at org.seleniumhq.jetty9.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:140)
-at org.seleniumhq.jetty9.util.thread.strategy.EatWhatYouKill.run(EatWhatYouKill.java:131)
-at org.seleniumhq.jetty9.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:382)
-at org.seleniumhq.jetty9.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:708)
-at org.seleniumhq.jetty9.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:626)
-at java.lang.Thread.run(Unknown Source)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.WebDriverException -->
+        <test-method is-config="true" signature="beforeClass()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:39Z" name="beforeClass" finished-at="2018-07-19T09:04:39Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- f -->
-        <test-method is-config="true" signature="afterTest()[pri:0, instance:com.ParallelTest@7bd4937b]" started-at="2018-07-18T09:35:07Z" name="afterTest" finished-at="2018-07-18T09:35:07Z" duration-ms="1" status="FAIL">
-          <exception class="java.lang.NullPointerException">
-            <full-stacktrace>
-              <![CDATA[java.lang.NullPointerException
-at com.ParallelTest.afterTest(ParallelTest.java:46)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.base/java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.MethodInvocationHelper.invokeMethodConsideringTimeout(MethodInvocationHelper.java:59)
-at org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:455)
-at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:222)
-at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:142)
-at org.testng.TestRunner.afterRun(TestRunner.java:725)
-at org.testng.TestRunner.run(TestRunner.java:509)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.access$000(SuiteRunner.java:40)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:489)
-at org.testng.internal.thread.ThreadUtil$1.call(ThreadUtil.java:52)
-at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.base/java.lang.Thread.run(Unknown Source)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.NullPointerException -->
+        </test-method> <!-- beforeClass -->
+        <test-method is-config="true" signature="beforeMethod()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="beforeMethod" finished-at="2018-07-19T09:04:40Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeMethod -->
+        <test-method signature="f1()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="f1" finished-at="2018-07-19T09:04:40Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- f1 -->
+        <test-method is-config="true" signature="afterMethod()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="afterMethod" finished-at="2018-07-19T09:04:40Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterMethod -->
+        <test-method is-config="true" signature="beforeMethod()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="beforeMethod" finished-at="2018-07-19T09:04:40Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeMethod -->
+        <test-method signature="f2()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="f2" finished-at="2018-07-19T09:04:40Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- f2 -->
+        <test-method is-config="true" signature="afterMethod()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="afterMethod" finished-at="2018-07-19T09:04:40Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterMethod -->
+        <test-method is-config="true" signature="afterClass()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="afterClass" finished-at="2018-07-19T09:04:40Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterClass -->
+        <test-method is-config="true" signature="afterTest()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="afterTest" finished-at="2018-07-19T09:04:40Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterTest -->
-      </class> <!-- com.ParallelTest -->
-    </test> <!-- Test1 -->
-    <test started-at="2018-07-18T09:35:06Z" name="Test2" finished-at="2018-07-18T09:40:20Z" duration-ms="313673">
-      <class name="com.ParallelTest">
-        <test-method is-config="true" signature="beforeTest(java.lang.String)[pri:0, instance:com.ParallelTest@32502377]" started-at="2018-07-18T09:35:06Z" name="beforeTest" finished-at="2018-07-18T09:35:06Z" duration-ms="34" status="PASS">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[Chrome]]>
-              </value>
-            </param>
-          </params>
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:com.TestNGExecution@6d763516]" started-at="2018-07-19T09:04:40Z" name="afterSuite" finished-at="2018-07-19T09:04:40Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- beforeTest -->
-        <test-method signature="f()[pri:0, instance:com.ParallelTest@32502377]" started-at="2018-07-18T09:35:06Z" name="f" finished-at="2018-07-18T09:40:20Z" duration-ms="313598" status="FAIL">
-          <exception class="org.openqa.selenium.remote.UnreachableBrowserException">
-            <message>
-              <![CDATA[Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
-Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:32:19.891Z'
-System info: host: 'DXCINDAI694979', ip: '20.15.150.14', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '10.0.1'
-Driver info: driver.version: RemoteWebDriver]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.openqa.selenium.remote.UnreachableBrowserException: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure.
-Build info: version: '3.13.0', revision: '2f0d292', time: '2018-06-25T15:32:19.891Z'
-System info: host: 'DXCINDAI694979', ip: '20.15.150.14', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '10.0.1'
-Driver info: driver.version: RemoteWebDriver
-at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:569)
-at org.openqa.selenium.remote.RemoteWebDriver.startSession(RemoteWebDriver.java:212)
-at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:130)
-at org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:143)
-at com.ParallelTest.f(ParallelTest.java:22)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.base/java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
-at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
-at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
-at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-at org.testng.TestRunner.privateRun(TestRunner.java:648)
-at org.testng.TestRunner.run(TestRunner.java:505)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.access$000(SuiteRunner.java:40)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:489)
-at org.testng.internal.thread.ThreadUtil$1.call(ThreadUtil.java:52)
-at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.base/java.lang.Thread.run(Unknown Source)
-Caused by: java.net.SocketException: Connection reset
-at java.base/java.net.SocketInputStream.read(Unknown Source)
-at java.base/java.net.SocketInputStream.read(Unknown Source)
-at okio.Okio$2.read(Okio.java:140)
-at okio.AsyncTimeout$2.read(AsyncTimeout.java:237)
-at okio.RealBufferedSource.indexOf(RealBufferedSource.java:355)
-at okio.RealBufferedSource.readUtf8LineStrict(RealBufferedSource.java:227)
-at okhttp3.internal.http1.Http1Codec.readHeaderLine(Http1Codec.java:215)
-at okhttp3.internal.http1.Http1Codec.readResponseHeaders(Http1Codec.java:189)
-at okhttp3.internal.http.CallServerInterceptor.intercept(CallServerInterceptor.java:88)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:147)
-at okhttp3.internal.connection.ConnectInterceptor.intercept(ConnectInterceptor.java:45)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:147)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:121)
-at okhttp3.internal.cache.CacheInterceptor.intercept(CacheInterceptor.java:93)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:147)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:121)
-at okhttp3.internal.http.BridgeInterceptor.intercept(BridgeInterceptor.java:93)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:147)
-at okhttp3.internal.http.RetryAndFollowUpInterceptor.intercept(RetryAndFollowUpInterceptor.java:126)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:147)
-at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:121)
-at okhttp3.RealCall.getResponseWithInterceptorChain(RealCall.java:200)
-at okhttp3.RealCall.execute(RealCall.java:77)
-at org.openqa.selenium.remote.internal.OkHttpClient.execute(OkHttpClient.java:105)
-at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:101)
-at org.openqa.selenium.remote.ProtocolHandshake.createSession(ProtocolHandshake.java:73)
-at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:136)
-at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:548)
-... 24 more
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.remote.UnreachableBrowserException -->
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- f -->
-        <test-method is-config="true" signature="afterTest()[pri:0, instance:com.ParallelTest@32502377]" started-at="2018-07-18T09:40:20Z" name="afterTest" finished-at="2018-07-18T09:40:20Z" duration-ms="0" status="FAIL">
-          <exception class="java.lang.NullPointerException">
-            <full-stacktrace>
-              <![CDATA[java.lang.NullPointerException
-at com.ParallelTest.afterTest(ParallelTest.java:46)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-at java.base/java.lang.reflect.Method.invoke(Unknown Source)
-at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
-at org.testng.internal.MethodInvocationHelper.invokeMethodConsideringTimeout(MethodInvocationHelper.java:59)
-at org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:455)
-at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:222)
-at org.testng.internal.Invoker.invokeConfigurations(Invoker.java:142)
-at org.testng.TestRunner.afterRun(TestRunner.java:725)
-at org.testng.TestRunner.run(TestRunner.java:509)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
-at org.testng.SuiteRunner.access$000(SuiteRunner.java:40)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:489)
-at org.testng.internal.thread.ThreadUtil$1.call(ThreadUtil.java:52)
-at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
-at java.base/java.lang.Thread.run(Unknown Source)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.NullPointerException -->
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- afterTest -->
-      </class> <!-- com.ParallelTest -->
-    </test> <!-- Test2 -->
+        </test-method> <!-- afterSuite -->
+      </class> <!-- com.TestNGExecution -->
+    </test> <!-- Test -->
   </suite> <!-- Suite -->
 </testng-results>

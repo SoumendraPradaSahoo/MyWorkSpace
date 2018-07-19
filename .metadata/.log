@@ -2237,3 +2237,31 @@ java -ea -classpath D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\tes
   Class:     org.testng.remote.RemoteTestNG
   Args:      -serport 62564 -protocol json -d D:\MyWorkSpace\JavaProject\test-output D:\MyWorkSpace\JavaProject\ParallelTest.xml
 java -ea -classpath D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar:D:\MyWorkSpace\JavaProject\bin:D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar:D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar:D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar:D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar:D:\selenium-server-standalone-3.13.0.jar org.testng.remote.RemoteTestNG -serport 62564 -protocol json -d D:\MyWorkSpace\JavaProject\test-output D:\MyWorkSpace\JavaProject\ParallelTest.xml
+
+!ENTRY org.eclipse.core.net 4 0 2018-07-19 13:01:44.966
+!MESSAGE WinHttp.GetProxyForUrl for pac failed with error 'The handle is invalid.
+' #6.
+
+!ENTRY org.testng.eclipse 1 0 2018-07-19 13:27:18.581
+!MESSAGE [TestNGLaunchConfigurationDelegate] Launching:
+  Classpath: D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar D:\MyWorkSpace\JavaProject\bin D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar D:\selenium-server-standalone-3.13.0.jar
+  VMArgs:    -ea
+  Class:     org.testng.remote.RemoteTestNG
+  Args:      -serport 60594 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse--791751860\testng-customsuite.xml
+java -ea -classpath D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar:D:\MyWorkSpace\JavaProject\bin:D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar:D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar:D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar:D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar:D:\selenium-server-standalone-3.13.0.jar org.testng.remote.RemoteTestNG -serport 60594 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse--791751860\testng-customsuite.xml
+
+!ENTRY org.testng.eclipse 1 0 2018-07-19 13:30:41.388
+!MESSAGE [TestNGLaunchConfigurationDelegate] Launching:
+  Classpath: D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar D:\MyWorkSpace\JavaProject\bin D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar D:\selenium-server-standalone-3.13.0.jar
+  VMArgs:    -ea
+  Class:     org.testng.remote.RemoteTestNG
+  Args:      -serport 60712 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse--1889750244\testng-customsuite.xml
+java -ea -classpath D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar:D:\MyWorkSpace\JavaProject\bin:D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar:D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar:D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar:D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar:D:\selenium-server-standalone-3.13.0.jar org.testng.remote.RemoteTestNG -serport 60712 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse--1889750244\testng-customsuite.xml
+
+!ENTRY org.testng.eclipse 1 0 2018-07-19 13:33:23.712
+!MESSAGE [TestNGLaunchConfigurationDelegate] Launching:
+  Classpath: D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar D:\MyWorkSpace\JavaProject\bin D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar D:\selenium-server-standalone-3.13.0.jar
+  VMArgs:    -ea
+  Class:     org.testng.remote.RemoteTestNG
+  Args:      -serport 60886 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse-162140831\testng-customsuite.xml
+java -ea -classpath D:\eclipse\configuration\org.eclipse.osgi\1002\0\.cp\lib\testng-remote.jar:D:\MyWorkSpace\JavaProject\bin:D:\eclipse\plugins\org.testng_6.14.2.r201802161450.jar:D:\eclipse\plugins\com.beust.jcommander_1.72.0.jar:D:\eclipse\plugins\org.apache-extras.beanshell.bsh_2.0.0.b6.jar:D:\eclipse\plugins\org.yaml.snakeyaml_1.17.0.jar:D:\selenium-server-standalone-3.13.0.jar org.testng.remote.RemoteTestNG -serport 60886 -protocol json -d D:\MyWorkSpace\JavaProject\test-output C:\Users\ssahoo43\AppData\Local\Temp\1\testng-eclipse-162140831\testng-customsuite.xml
