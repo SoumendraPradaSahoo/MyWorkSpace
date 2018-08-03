@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="D:\MyWorkSpace\JavaProject"/>
+		<item value="D:\MyWorkSpace\CucumberJava"/>
 		<item value="D:\eAppAutomation"/>
 		<item value="D:\eApp_Automation\eAppAutomation"/>
 	</list>
