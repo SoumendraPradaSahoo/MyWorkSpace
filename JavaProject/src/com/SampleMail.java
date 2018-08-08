@@ -71,7 +71,7 @@ public class SampleMail {
 			multiPartMesssage.addBodyPart(messageBodyPart);
 			
 			messageBodyPart = new MimeBodyPart();
-			DataSource source = new FileDataSource("\\Desktop\\sample.pdf");	
+			DataSource source = new FileDataSource("C:\\Users\\ssahoo43\\Desktop\\sample.pdf");	
 			messageBodyPart.setDataHandler(new DataHandler(source));
 			messageBodyPart.setFileName("sample File.PDF");
 			multiPartMesssage.addBodyPart(messageBodyPart);
