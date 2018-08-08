@@ -13,7 +13,7 @@ public class TestNGClass {
 	TestListenerAdapter list = new TestListenerAdapter();
 	test.addListener(list);
 	List<String> suites = new ArrayList<String>();
-	suites.add("D:\\MyWorkSpace\\JavaProject\\TestNgExecution.xml");
+	suites.add("D:\\MyWorkSpace\\JavaProject\\TestNGExampleGoogleSearch.xml");
 	test.setTestSuites(suites);
 	test.run();
 	List<ITestResult> result = list.getPassedTests();

@@ -1,5 +1,6 @@
 package com;
 import java.util.Properties;
+import java.util.Scanner;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -18,12 +19,21 @@ import javax.mail.internet.MimeMultipart;
 public class SampleMail {
 
 	public static void main(String[] args) {
-
-		final String username = "XXXXX@gmail.com";
-		final String password = "XXXXXX";
-		final String to = "XXXXXXX.co.in";
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print("Enter user name: ");
+		final String username = sc.nextLine();
+		System.out.print("Enter password: ");
+		final String password = sc.nextLine();
+		System.out.print("Enter e-mail id of recepient: ");
+		final String to = sc.nextLine();
 		final String smtpServer = "smtp.gmail.com";
-
+		sc.close();
+		
+		/*System.out.println(username);
+		System.out.println(password);
+		System.out.println(to);*/
+		
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");

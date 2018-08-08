@@ -21,7 +21,7 @@ public class ParallelTest {
 	public void f() throws MalformedURLException {
 		driver = new RemoteWebDriver(new URL("http://localhost:8080/wd/hub"), cap);
 		driver.get("https://www.google.com/");
-		//driver.manage().window().maximize();
+		driver.manage().window().maximize();
 		driver.findElement(By.name("q")).sendKeys("Soumendra");
 		driver.findElement(By.name("q")).submit();
 		System.out.println(driver.getTitle());
