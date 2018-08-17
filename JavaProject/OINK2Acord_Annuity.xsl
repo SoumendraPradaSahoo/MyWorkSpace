@@ -3226,14 +3226,10 @@
 							<Relation id="Relation_OWN1"
 								OriginatingObjectID="Holding_1">
 								<xsl:if test="./instanceData/TXLife/A_OwnerType = '1'">
-									<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_ENTITY" />
-												</xsl:attribute>
+									<xsl:attribute name="RelatedObjectID">Party_OWN"</xsl:attribute>
 								</xsl:if>
 								<xsl:if test="./instanceData/TXLife/A_OwnerType = '2'">
-									<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_OWN" />
-												</xsl:attribute>
+									<xsl:attribute name="RelatedObjectID">Party_ENTITY"</xsl:attribute>
 								</xsl:if>
 								<OriginatingObjectType tc="4">Holding
 								</OriginatingObjectType>
@@ -3305,33 +3301,23 @@
 											<xsl:choose>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '1'">
-													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_PINS" />
-													</xsl:attribute>
+													<xsl:attribute name="RelatedObjectID">Party_PINS</xsl:attribute>
 												</xsl:when>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '2'">
-													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_JNT" />
-													</xsl:attribute>
+													<xsl:attribute name="RelatedObjectID">Party_JNT</xsl:attribute>
 												</xsl:when>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and ../A_OwnerType = '1'">
-													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_OWN" />
-													</xsl:attribute>
+													<xsl:attribute name="RelatedObjectID">Party_OWN</xsl:attribute>
 												</xsl:when>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and ../A_OwnerType = '2'">
-													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_ENTITY" />
-													</xsl:attribute>
+													<xsl:attribute name="RelatedObjectID">Party_ENTITY</xsl:attribute>
 												</xsl:when>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '4'">
-													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of select="Party_JointOwn" />
-													</xsl:attribute>
+													<xsl:attribute name="RelatedObjectID">Party_JointOwn</xsl:attribute>
 												</xsl:when>
 												<xsl:when
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '-1'">
