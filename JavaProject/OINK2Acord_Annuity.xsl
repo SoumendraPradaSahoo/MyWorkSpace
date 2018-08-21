@@ -3101,8 +3101,7 @@
 							</RelationRoleCode><!-- Citation needed for actual tc value -->
 							<xsl:if
 								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA ='1'">
-								<RelationDescription tc="900">Spouse
-								</RelationDescription>
+								<RelationDescription tc="900">Spouse</RelationDescription>
 							</xsl:if>
 							<!-- Need confirmation for non spousal IRA -->
 							<!-- <xsl:if
@@ -3202,8 +3201,12 @@
 						</OriginatingObjectType>
 						<RelatedObjectType tc="6">Party</RelatedObjectType>
 						<RelationRoleCode tc="35">Annuitant</RelationRoleCode>
-						<RelationDescription tc="91">Self
-						</RelationDescription><!-- Citation Required for GIB Plans -->
+						<xsl:if test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn != '1'">
+						<RelationDescription tc="91">Self</RelationDescription>
+						</xsl:if>
+						<xsl:if test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn = '1'">
+						<RelationDescription tc="2147483647">Other</RelationDescription>
+						</xsl:if>
 					</Relation>
 					<!-- Owner Relation when Annuitant is Owner -->
 					<xsl:if test="./instanceData/TXLife/A_OwnOtherThanAnn = '0'">
@@ -3213,8 +3216,7 @@
 							</OriginatingObjectType>
 							<RelatedObjectType tc="6">Party</RelatedObjectType>
 							<RelationRoleCode tc="8">Owner</RelationRoleCode>
-							<RelationDescription tc="91">Self
-							</RelationDescription>
+							<RelationDescription tc="91">Self</RelationDescription>
 						</Relation>
 					</xsl:if>
 					<!-- OWN Relation -->
@@ -3226,16 +3228,15 @@
 							<Relation id="Relation_OWN1"
 								OriginatingObjectID="Holding_1">
 								<xsl:if test="./instanceData/TXLife/A_OwnerType = '1'">
-									<xsl:attribute name="RelatedObjectID">Party_OWN"</xsl:attribute>
+									<xsl:attribute name="RelatedObjectID">Party_OWN</xsl:attribute>
 								</xsl:if>
 								<xsl:if test="./instanceData/TXLife/A_OwnerType = '2'">
-									<xsl:attribute name="RelatedObjectID">Party_ENTITY"</xsl:attribute>
+									<xsl:attribute name="RelatedObjectID">Party_ENTITY</xsl:attribute>
 								</xsl:if>
-								<OriginatingObjectType tc="4">Holding
-								</OriginatingObjectType>
-								<RelatedObjectType tc="6">Party
-								</RelatedObjectType>
+								<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
+								<RelatedObjectType tc="6">Party</RelatedObjectType>
 								<RelationRoleCode tc="8">Owner</RelationRoleCode>
+								<RelationDescription tc="91">Self</RelationDescription>
 							</Relation>
 						</xsl:if>
 					</xsl:if>
@@ -3246,12 +3247,17 @@
 											string-length(./instanceData/TXLife/A_LastName_JointOwn) > 0 ">
 							<Relation id="Relation_OWN2"
 								OriginatingObjectID="Holding_1" RelatedObjectID="Party_JointOwn">
-								<OriginatingObjectType tc="4">Holding
-								</OriginatingObjectType>
-								<RelatedObjectType tc="6">Party
-								</RelatedObjectType>
-								<RelationRoleCode tc="184">Joint Owner
-								</RelationRoleCode>
+								<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
+								<RelatedObjectType tc="6">Party</RelatedObjectType>
+								<RelationRoleCode tc="184">Joint Owner</RelationRoleCode>
+								<RelationDescription>
+									<xsl:attribute name="tc">
+										<xsl:value-of
+											select="instanceData/TXLife/A_RelToOwner_JointOwn" />
+									</xsl:attribute>
+									<xsl:value-of
+									select="instanceData/TXLife/A_RelToOwner_JointOwn_Desc" />
+								</RelationDescription>
 							</Relation>
 						</xsl:if>
 					</xsl:if>
