@@ -115,15 +115,24 @@
 								</xsl:when>
 							</xsl:choose>
 							<xsl:if
-								test="./instanceData/TXLife/A_PaymentMethod = '7' and ./instanceData/TXLife/A_WithdrawalOpt = '2'">
+								test="./instanceData/TXLife/A_CashWithAppInd = '1' ">
 								<PaymentDraftDay>
 									<xsl:value-of
-										select="instanceData/TXLife/A_WithdrawalDay" />
+										select="instanceData/TXLife/A_DebitDay" />
 								</PaymentDraftDay>
 							</xsl:if>
-							<Life>
-								<QualPlanType tc="1">NonQualified</QualPlanType>
-								<!-- modified by Puja -->
+							<Annuity>
+								<!-- Citation Required -->
+								<PremType tc="1">Single</PremType>
+								<QualPlanType>
+									<xsl:attribute name="tc">
+												<xsl:value-of
+										select="instanceData/TXLife/A_ContractAppliedFor" />
+											</xsl:attribute>
+									<xsl:value-of
+										select="instanceData/TXLife/A_ContractAppliedFor_Desc" />
+								</QualPlanType>
+								<!-- Citation Required -->
 								<xsl:if
 									test="string-length(instanceData/TXLife/A_AmtCollected_TIA)>0 ">
 									<xsl:choose>
@@ -162,257 +171,171 @@
 										</xsl:when>
 									</xsl:choose>
 								</xsl:if>
-								<!--xsl:otherwise> <ReplacementType tc="3">External</ReplacementType> 
-									</xsl:otherwise -->
-								<!-- modified by Puja -->
-								<Coverage id="Coverage_1">
-									<ProductCode>
-										<xsl:value-of
-											select="instanceData/TXLife/A_ProductCode_IUL" />
-									</ProductCode>
-									<LifeCovStatus tc="1">Active</LifeCovStatus>
-									<xsl:if
-										test="./instanceData/TXLife/A_TobaccoInd_PINS = '0'">
-										<TobaccoPremiumBasis tc="1">Non Smoker
-										</TobaccoPremiumBasis>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_TobaccoInd_PINS = '1'">
-										<TobaccoPremiumBasis tc="2">Smoker
-										</TobaccoPremiumBasis>
-									</xsl:if>
-									<xsl:choose>
-										<xsl:when
-											test="./instanceData/TXLife/A_EstatePlan = '8'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_EstatePlan" />
-											</xsl:attribute>
-												Estate Planning
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_CharitableGiving = '9'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_CharitableGiving" />
-											</xsl:attribute>
-												Charitable Giving
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_KeyPerson = '14'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_KeyPerson" />
-											</xsl:attribute>
-												Key Person
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_MortgagePro = '32'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_MortgagePro" />
-											</xsl:attribute>
-												Mortgage Protection
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_ExecutuveBonus = '16'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_ExecutuveBonus" />
-											</xsl:attribute>
-												Executive Bonus
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_BuySell = '15'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_BuySell" />
-											</xsl:attribute>
-												Buy/Sell
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_IncomePro = '21'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_IncomePro" />
-											</xsl:attribute>
-												Income Protection
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_BusinessNeeds = '3'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_BusinessNeeds" />
-											</xsl:attribute>
-												Business Needs - Other
-											</Purpose>
-										</xsl:when>
-										<xsl:when
-											test="./instanceData/TXLife/A_POIOther = '2147483647'">
-											<Purpose>
-												<xsl:attribute name="tc">
-												<xsl:value-of
-													select="instanceData/TXLife/A_POIOther" />
-											</xsl:attribute>
-												<xsl:value-of
-													select="instanceData/TXLife/A_POIOtherDetails" />
-											</Purpose>
-										</xsl:when>
-									</xsl:choose>
-									<IndicatorCode tc="1">Base</IndicatorCode>
-									<LivesType tc="1">Single Life</LivesType>
-									<DeathBenefitOptType tc="1">Level
-									</DeathBenefitOptType>
-									<xsl:choose>
-										<xsl:when
-											test="contains(instanceData/TXLife/A_CurrentAmt_IUL ,'$')">
-											<CurrentAmt>
-												<xsl:value-of
-													select="translate(substring-after(instanceData/TXLife/A_CurrentAmt_IUL, '$'),',','')" />
-											</CurrentAmt>
-										</xsl:when>
-										<xsl:when
-											test="not(contains(instanceData/TXLife/A_CurrentAmt_IUL ,'$'))">
-											<CurrentAmt>
-												<xsl:value-of
-													select="translate(instanceData/TXLife/A_CurrentAmt_IUL,',','')" />
-											</CurrentAmt>
-										</xsl:when>
-									</xsl:choose>
-									<!-- RIDERS IMPLEMENTATION -->
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_LTCR_IUL)>0">
-										<CovOption id="CovOption_LTCR_1">
-											<ProductCode>
-												<xsl:value-of select="$LTCR" />
-											</ProductCode>
-											<LifeCovOptTypeCode tc="30">Long Term Care
-											</LifeCovOptTypeCode>
-											<OLifEExtension VendorCode="05"
-												ExtensionCode="CovOption 2.8.90">
-												<CovOptionExtension>
-													<xsl:if
-														test="string-length(instanceData/TXLife/A_LTCR_Duration_IUL)>0">
-														<Duration>
-															<xsl:value-of
-																select="instanceData/TXLife/A_LTCR_Duration_IUL" />
-														</Duration>
-													</xsl:if>
-												</CovOptionExtension>
-											</OLifEExtension>
-										</CovOption>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_EOBR_IUL)>0">
-										<CovOption id="CovOption_EOBR_1">
-											<ProductCode>
-												<xsl:value-of select="$EOBR" />
-											</ProductCode>
-											<LifeCovOptTypeCode tc="31">Extension of
-												Benefits Rider
-											</LifeCovOptTypeCode>
-											<OLifEExtension VendorCode="05"
-												ExtensionCode="CovOption 2.8.90">
-												<CovOptionExtension>
-													<xsl:if
-														test="string-length(instanceData/TXLife/A_EOBR_Duration_IUL )>0">
-														<Duration>
-															<xsl:value-of
-																select="instanceData/TXLife/A_EOBR_Duration_IUL" />
-														</Duration>
-													</xsl:if>
-												</CovOptionExtension>
-											</OLifEExtension>
-										</CovOption>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_ILTCR_IUL)>0">
-										<CovOption id="CovOption_ILTCR_1">
-											<ProductCode><!-- BHFD-1294 -->
-												<xsl:value-of select="$ILTCR" />
-											</ProductCode>
-											<LifeCovOptTypeCode tc="1009900002">Extension of
-												Benefits for Long- Term Care with Inflation Coverage
-											</LifeCovOptTypeCode>
-											<OLifEExtension VendorCode="05"
-												ExtensionCode="CovOption 2.8.90">
-												<CovOptionExtension>
-													<xsl:if
-														test="string-length(instanceData/TXLife/A_ILTCR_Duration_IUL)>0">
-														<Duration>
-															<xsl:value-of
-																select="instanceData/TXLife/A_ILTCR_Duration_IUL" />
-														</Duration>
-													</xsl:if>
-												</CovOptionExtension>
-											</OLifEExtension>
-										</CovOption>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_IndexLTCR_IUL)>0">
-										<CovOption id="CovOption_IndexLTCR_1">
-											<ProductCode><!-- BHFD-1294 -->
-												<xsl:value-of select="$IndexLTCR" />
-											</ProductCode>
-											<LifeCovOptTypeCode tc="1009900003">Extension of
-												Benefits for Long-Term Care with Index Coverage Rider
-											</LifeCovOptTypeCode>
-											<OLifEExtension VendorCode="05"
-												ExtensionCode="CovOption 2.8.90">
-												<CovOptionExtension>
-													<xsl:if
-														test="string-length(instanceData/TXLife/A_IndexLTCR_Duration_IUL)>0">
-														<Duration>
-															<xsl:value-of
-																select="instanceData/TXLife/A_IndexLTCR_Duration_IUL" />
-														</Duration>
-													</xsl:if>
-												</CovOptionExtension>
-											</OLifEExtension>
-										</CovOption>
-									</xsl:if>
-									<LifeParticipant id="LifeParticipant_1"
+								<Payout id="Payout_1">
+									<Participant id="PayoutParticipant_1"
 										PartyID="Party_PINS">
-										<LifeParticipantRoleCode tc="1">Primary
-											Insured
-										</LifeParticipantRoleCode>
-										<OLifEExtension VendorCode="05"
-											ExtensionCode="LifeParticipant 2.8.90">
-											<LifeParticipantExtension>
+										<ParticipantRoleCode tc="27">Annuitant
+										</ParticipantRoleCode>
+									</Participant>
+									<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<Participant id="PayoutParticipant_2"
+											PartyID="Party_JNT">
+											<ParticipantRoleCode tc="28">Joint Annuitant
+											</ParticipantRoleCode>
+										</Participant>
+									</xsl:if>
+								</Payout>
+								<!--Rider Implementation -->
+								<!--Living Benefit Rider -->
+								<xsl:if
+									test="(string-length(instanceData/TXLife/A_LivingBenefit_Riders_Desc)>0 and 
+										./instanceData/TXLife/A_LivingBenefit_Riders != '1')">
+									<Rider id="Rider_1">
+										<RiderTypeCode tc="327">Living Benefit Rider
+										</RiderTypeCode>
+										<RiderCode>
+											<xsl:value-of
+												select="instanceData/TXLife/A_LivingBenefit_Riders" />
+										</RiderCode>
+										<Participant id="Participant_1_1"
+											PartyID="Party_PINS">
+											<ParticipantRoleCode tc="27">Annuitant
+											</ParticipantRoleCode>
+										</Participant>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnInd = '1'">
+											<Participant id="Participant_1_2"
+												PartyID="Party_JNT">
+												<ParticipantRoleCode tc="28">Joint Annuitant
+												</ParticipantRoleCode>
+											</Participant>
+										</xsl:if>
+										<OLifEExtension ExtensionCode="Rider 2.8.90"
+											VendorCode="05">
+											<AnnuityRiderExtension>
 												<xsl:if
-													test="(./instanceData/TXLife/A_TobaccoInd_PINS) = '0'">
-													<ProposedTobaccoPremiumBasis
-														tc="1">Non Smoker</ProposedTobaccoPremiumBasis>
+													test="./instanceData/TXLife/A_JointAnnInd != '1'">
+													<LivesType tc="1">Single Life</LivesType>
 												</xsl:if>
 												<xsl:if
-													test="(./instanceData/TXLife/A_TobaccoInd_PINS) = '1'">
-													<ProposedTobaccoPremiumBasis
-														tc="2">Smoker</ProposedTobaccoPremiumBasis>
+													test="./instanceData/TXLife/A_JointAnnInd = '1'">
+													<LivesType tc="2">Joint Life</LivesType>
 												</xsl:if>
-												<xsl:if
-													test="(./instanceData/TXLife/A_Gender_PINS) = '3'">
-													<NonbinaryInd tc="1">True</NonbinaryInd>
-												</xsl:if>
-											</LifeParticipantExtension>
+											</AnnuityRiderExtension>
 										</OLifEExtension>
-									</LifeParticipant>
-								</Coverage>
-								<LifeUSA>
+									</Rider>
+								</xsl:if>
+								<!--Death Benefit Rider -->
+								<xsl:if
+									test="(string-length(instanceData/TXLife/A_DeathBenefit_Riders_Desc)>0 and 
+										./instanceData/TXLife/A_DeathBenefit_Riders != '1')">
+									<Rider id="Rider_2">
+										<RiderTypeCode tc="206">Death Benefit Rider
+										</RiderTypeCode>
+										<RiderCode>
+											<xsl:value-of
+												select="instanceData/TXLife/A_DeathBenefit_Riders" />
+										</RiderCode>
+										<Participant id="Participant_2_1"
+											PartyID="Party_PINS">
+											<ParticipantRoleCode tc="27">Annuitant
+											</ParticipantRoleCode>
+										</Participant>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnInd = '1'">
+											<Participant id="Participant_2_2"
+												PartyID="Party_JNT">
+												<ParticipantRoleCode tc="28">Joint Annuitant
+												</ParticipantRoleCode>
+											</Participant>
+										</xsl:if>
+										<OLifEExtension ExtensionCode="Rider 2.8.90"
+											VendorCode="05">
+											<AnnuityRiderExtension>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd != '1'">
+													<LivesType tc="1">Single Life</LivesType>
+												</xsl:if>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd = '1'">
+													<LivesType tc="2">Joint Life</LivesType>
+												</xsl:if>
+											</AnnuityRiderExtension>
+										</OLifEExtension>
+									</Rider>
+								</xsl:if>
+								<!-- Earning Preservation Benefit Rider -->
+								<xsl:if test="./instanceData/TXLife/A_EPBCB = 'ER'">
+									<Rider id="Rider_3">
+										<RiderTypeCode tc="205">Earning Preservation Benefit
+											Rider
+										</RiderTypeCode>
+										<RiderCode>ER</RiderCode>
+										<Participant id="Participant_3_1"
+											PartyID="Party_PINS">
+											<ParticipantRoleCode tc="27">Annuitant
+											</ParticipantRoleCode>
+										</Participant>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnInd = '1'">
+											<Participant id="Participant_3_2"
+												PartyID="Party_JNT">
+												<ParticipantRoleCode tc="28">Joint Annuitant
+												</ParticipantRoleCode>
+											</Participant>
+										</xsl:if>
+										<OLifEExtension ExtensionCode="Rider 2.8.90"
+											VendorCode="05">
+											<AnnuityRiderExtension>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd != '1'">
+													<LivesType tc="1">Single Life</LivesType>
+												</xsl:if>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd = '1'">
+													<LivesType tc="2">Joint Life</LivesType>
+												</xsl:if>
+											</AnnuityRiderExtension>
+										</OLifEExtension>
+									</Rider>
+								</xsl:if>
+								<!-- Principal Guarantee Rider -->
+								<!-- Citation Required -->
+								<xsl:if test="./instanceData/TXLife/A_PGRCB = '1'">
+									<Rider id="Rider_4">
+										<RiderTypeCode tc="?">Principal Guarantee Rider
+										</RiderTypeCode>
+										<RiderCode>?</RiderCode>
+										<Participant id="Participant_4_1"
+											PartyID="Party_PINS">
+											<ParticipantRoleCode tc="27">Annuitant
+											</ParticipantRoleCode>
+										</Participant>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnInd = '1'">
+											<Participant id="Participant_4_2"
+												PartyID="Party_JNT">
+												<ParticipantRoleCode tc="28">Joint Annuitant
+												</ParticipantRoleCode>
+											</Participant>
+										</xsl:if>
+										<OLifEExtension ExtensionCode="Rider 2.8.90"
+											VendorCode="05">
+											<AnnuityRiderExtension>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd != '1'">
+													<LivesType tc="1">Single Life</LivesType>
+												</xsl:if>
+												<xsl:if
+													test="./instanceData/TXLife/A_JointAnnInd = '1'">
+													<LivesType tc="2">Joint Life</LivesType>
+												</xsl:if>
+											</AnnuityRiderExtension>
+										</OLifEExtension>
+									</Rider>
+								</xsl:if>
+								<!-- Citation Required -->
+								<AnnuityUSA>
 									<DefLifeInsMethod>
 										<xsl:attribute name="tc">
 											<xsl:value-of select="$DefLifeInsMethodtc" />
@@ -428,8 +351,8 @@
 										test="./instanceData/TXLife/A_Internal1035 = '0'">
 										<Internal1035 tc="0">false</Internal1035>
 									</xsl:if>
-								</LifeUSA>
-							</Life>
+								</AnnuityUSA>
+							</Annuity>
 							<ApplicationInfo>
 								<ApplicationType tc="1">New</ApplicationType>
 								<ApplicationJurisdiction>
@@ -443,7 +366,7 @@
 								<FormalAppInd tc="1">True</FormalAppInd>
 								<xsl:if
 									test="./instanceData/TXLife/A_SignatureMethod = '1'">
-									<!-- wet signature paper warp case -->
+									<!-- wet signature paper aap case -->
 									<xsl:choose>
 										<xsl:when
 											test="string-length(instanceData/TXLife/A_SignatureDate)>0">
@@ -475,73 +398,65 @@
 								</xsl:if>
 								<xsl:if
 									test="./instanceData/TXLife/A_SignatureMethod = '1'">
-									<!-- Paper Wrap Case -->
+									<!-- Annuitant = Owner -->
 									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '0'">
-										<AppProposedInsuredSignatureOK
-											tc="0">false</AppProposedInsuredSignatureOK>
+										test="./instanceData/TXLife/A_OwnOtherThanAnn != '1'">
 										<xsl:if
-											test="./instanceData/TXLife/A_PIOtherThanOwn = '0'">
-											<!-- owner is same as PINS -->
-											<AppOwnerSignatureOK tc="0">false
+											test="./instanceData/TXLife/A_PISignatureOK = '0'">
+											<AppOwnerSignatureOK tc="0">False
+											</AppOwnerSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_PISignatureOK = '1'">
+											<AppOwnerSignatureOK tc="1">True
 											</AppOwnerSignatureOK>
 										</xsl:if>
 									</xsl:if>
+									<!-- Annuitant <> Owner -->
 									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '1'">
-										<AppProposedInsuredSignatureOK
-											tc="1">true</AppProposedInsuredSignatureOK>
-										<xsl:if
-											test="./instanceData/TXLife/A_PIOtherThanOwn = '0'">
-											<!-- owner is same as PINS -->
-											<AppOwnerSignatureOK tc="1">true
-											</AppOwnerSignatureOK>
-										</xsl:if>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-										<!-- owner and PINS are diffrent -->
+										test="./instanceData/TXLife/A_OwnOtherThanAnn = '1'">
 										<xsl:if
 											test="./instanceData/TXLife/A_OwnerSignatureOK = '0'">
-											<AppOwnerSignatureOK tc="0">false
+											<AppOwnerSignatureOK tc="0">False
 											</AppOwnerSignatureOK>
 										</xsl:if>
 										<xsl:if
 											test="./instanceData/TXLife/A_OwnerSignatureOK = '1'">
-											<AppOwnerSignatureOK tc="1">true
+											<AppOwnerSignatureOK tc="1">True
 											</AppOwnerSignatureOK>
 										</xsl:if>
 									</xsl:if>
 									<xsl:if
 										test="./instanceData/TXLife/A_ProducerSignatureOK = '0'">
-										<AppWritingAgentSignatureOK tc="0">false
+										<AppWritingAgentSignatureOK tc="0">False
 										</AppWritingAgentSignatureOK>
 									</xsl:if>
 									<xsl:if
 										test="./instanceData/TXLife/A_ProducerSignatureOK = '1'">
-										<AppWritingAgentSignatureOK tc="1">true
+										<AppWritingAgentSignatureOK tc="1">True
 										</AppWritingAgentSignatureOK>
 									</xsl:if>
 								</xsl:if>
 								<xsl:choose>
 									<xsl:when
-										test="./instanceData/TXLife/A_ChangeExistingPolicyInd_PINS	= '1'">
-										<ReplacementInd tc="1">true</ReplacementInd>
+										test="./instanceData/TXLife/A_ChangeExistingPolicyInd_PINS = '1'">
+										<ReplacementInd tc="1">True</ReplacementInd>
 									</xsl:when>
 									<xsl:otherwise>
-										<ReplacementInd tc="0">false</ReplacementInd>
+										<ReplacementInd tc="0">False</ReplacementInd>
 									</xsl:otherwise>
 								</xsl:choose>
-								<xsl:if
-									test="./instanceData/TXLife/A_ReplacmentInd_AGT1 != '1'">
-									<ProducerReplacementDisclosureInd
-										tc="0">false</ProducerReplacementDisclosureInd>
-								</xsl:if>
-								<xsl:if
-									test="./instanceData/TXLife/A_ReplacmentInd_AGT1 = '1'">
-									<ProducerReplacementDisclosureInd
-										tc="1">true</ProducerReplacementDisclosureInd>
-								</xsl:if>
+								<xsl:choose>
+									<xsl:when
+										test="./instanceData/TXLife/A_ReplacementInd_AGT1 = '1'">
+										<ProducerReplacementDisclosureInd
+											tc="1">True</ProducerReplacementDisclosureInd>
+									</xsl:when>
+									<xsl:otherwise>
+										<ProducerReplacementDisclosureInd
+											tc="0">False</ProducerReplacementDisclosureInd>
+									</xsl:otherwise>
+								</xsl:choose>
 								<SignatureInfo id="SignatureInfo_1">
 									<SignatureRoleCode tc="18">Owner
 									</SignatureRoleCode>
@@ -562,7 +477,6 @@
 											</SignatureDate>
 										</xsl:if>
 									</xsl:if>
-									<!-- Updated by Puja moved the tag below Signature Date -->
 									<xsl:if
 										test="./instanceData/TXLife/A_SignatureMethod = '1'">
 										<SignatureCity>
@@ -570,12 +484,22 @@
 												select="instanceData/TXLife/A_SignatureCity" />
 										</SignatureCity>
 									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_SignatureState != '-1'">
+										<SignatureState>
+											<xsl:attribute name="tc">
+										<xsl:value-of
+												select="instanceData/TXLife/A_SignatureState" />
+												</xsl:attribute>
+											<xsl:value-of
+												select="instanceData/TXLife/A_SignatureState_Desc" />
+										</SignatureState>
+									</xsl:if>
 									<!-- Updated by Puja -->
 								</SignatureInfo>
-								<OLifEExtension VendorCode="05"
-									ExtensionCode="ApplicationInfo 2.8.90">
+								<OLifEExtension
+									ExtensionCode="ApplicationInfo 2.8.90" VendorCode="05">
 									<ApplicationInfoExtension>
-										<!-- BHFD-1109 -->
 										<xsl:if
 											test="./instanceData/TXLife/A_ExistingInsInd_AGT1 = '1'">
 											<ProducerOtherInsDisclosureInd
@@ -585,332 +509,6 @@
 											test="./instanceData/TXLife/A_ExistingInsInd_AGT1 = '0'">
 											<ProducerOtherInsDisclosureInd
 												tc="0">False</ProducerOtherInsDisclosureInd>
-										</xsl:if>
-										<!-- <xsl:if test="./instanceData/TXLife/A_ExistingInsInd_AGT1 
-											= '2'"> <ProducerOtherInsDisclosureInd tc="1009900001">NA</ProducerOtherInsDisclosureInd> 
-											</xsl:if> -->
-										<xsl:if
-											test="./instanceData/TXLife/A_MedReqOrdered_AGT1 = '1'">
-											<BypassReqOrderInd tc="1">True
-											</BypassReqOrderInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_MedReqOrdered_AGT1 != '1'">
-											<xsl:if
-												test="./instanceData/TXLife/A_MedReqNotOrdered_AGT1 = '1'">
-												<BypassReqOrderInd tc="0">False
-												</BypassReqOrderInd>
-											</xsl:if>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ApplicationCompInd = '1'">
-											<AppCompUSInd tc="1">True</AppCompUSInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ApplicationCompInd != '1'">
-											<AppCompUSInd tc="0">False</AppCompUSInd>
-										</xsl:if>
-										<!-- BHFD-1180 and 1083 -->
-										<xsl:if
-											test="./instanceData/TXLife/A_GuardianSignatureOK = '1'">
-											<AppParentSignatureOKInd tc="1">True
-											</AppParentSignatureOKInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_GuardianSignatureOK = '0'">
-											<AppParentSignatureOKInd tc="0">False
-											</AppParentSignatureOKInd>
-										</xsl:if>
-										<xsl:if test="./instanceData/TXLife/A_InsToOwner = '1'">
-											<ChgInsToOwnerInd tc="1">True</ChgInsToOwnerInd>
-										</xsl:if>
-										<xsl:if test="./instanceData/TXLife/A_InsToOwner = '0'">
-											<ChgInsToOwnerInd tc="0">False
-											</ChgInsToOwnerInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_MedicaidCovInd = '1'">
-											<CoveredByMedicaidInd tc="1">True
-											</CoveredByMedicaidInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_MedicaidCovInd = '0'">
-											<CoveredByMedicaidInd tc="0">False
-											</CoveredByMedicaidInd>
-										</xsl:if>
-										<!--BHFD-1414 -->
-										<xsl:if
-											test="string-length(instanceData/TXLife/A_LTCLapsedDetails)>0">
-											<ExistingLTCLapse>
-												<xsl:call-template name="FormatDate">
-													<xsl:with-param name="Separator">
-														/
-													</xsl:with-param>
-													<xsl:with-param name="DateString">
-														<xsl:value-of
-															select="instanceData/TXLife/A_LTCLapsedDetails" />
-													</xsl:with-param>
-												</xsl:call-template>
-											</ExistingLTCLapse>
-										</xsl:if>
-										<xsl:if test="./instanceData/TXLife/A_Check_TIA = '1'">
-											<InitPremCheckInd tc="1">true</InitPremCheckInd>
-										</xsl:if>
-										<xsl:if test="./instanceData/TXLife/A_EFT_TIA = '1'">
-											<InitPremModePremFormInd tc="1">true
-											</InitPremModePremFormInd>
-										</xsl:if>
-										<xsl:if test="./instanceData/TXLife/A_Wire_TIA = '1'">
-											<InitPremWireInd tc="1">true</InitPremWireInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_BackupWithholdingInd = '1'">
-											<IRSNoticeInd tc="1">True</IRSNoticeInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_BackupWithholdingInd = '0'">
-											<IRSNoticeInd tc="0">False</IRSNoticeInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_AddNoticesInd = '1'">
-											<LapseNoticeInd tc="1">True</LapseNoticeInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_AddNoticesNone = '1' and ./instanceData/TXLife/A_AddNoticesInd != '1'">
-											<LapseNoticeInd tc="0">False</LapseNoticeInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OtherLTCInforce = '1'">
-											<LTCInforceInd tc="1">True</LTCInforceInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OtherLTCInforce = '0'">
-											<LTCInforceInd tc="0">False</LTCInforceInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_LTCLastYear = '1'">
-											<LTCInforce12MonthsInd tc="1">True
-											</LTCInforce12MonthsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_LTCLastYear = '0'">
-											<LTCInforce12MonthsInd tc="0">False
-											</LTCInforce12MonthsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_LTCReplacementInd = '1'">
-											<LTCReplaceInd tc="1">True</LTCReplaceInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_LTCReplacementInd = '0'">
-											<LTCReplaceInd tc="0">False</LTCReplaceInd>
-										</xsl:if>
-										<!-- NIGO indicator BHFD-1125 -->
-										<xsl:if test="./instanceData/TXLife/A_NIGOInd =  '1'">
-											<NIGOInd tc="1">True</NIGOInd>
-										</xsl:if>
-										<!--NIGOInd is optional field its only required for true value -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_NIGOInd = '0'"> <NIGOInd 
-											tc="0">False</NIGOInd> </xsl:if> -->
-										<xsl:if
-											test="./instanceData/TXLife/A_OffPaymtInd_PINS = '1'">
-											<OffPaymtForPolicyInd tc="1">True
-											</OffPaymtForPolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OffPaymtInd_PINS != '1'">
-											<OffPaymtForPolicyInd tc="0">False
-											</OffPaymtForPolicyInd>
-										</xsl:if>
-										<!-- BHFD-1145 -->
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnOffPaymtInd = '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnOffPaymtForPolicyInd tc="1">True
-											</OwnOffPaymtForPolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnOffPaymtInd != '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnOffPaymtForPolicyInd tc="0">False
-											</OwnOffPaymtForPolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_InforceNAppliedfor_OWN1 = '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnPendingInsInd tc="1">True</OwnPendingInsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_InforceNAppliedfor_OWN1 != '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnPendingInsInd tc="0">False
-											</OwnPendingInsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_InforceNAppliedfor_PINS 
-											= '1' and ./instanceData/TXLife/A_PIOtherThanOwn != '1'">
-											<OwnPendingInsInd tc="1">True</OwnPendingInsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_InforceNAppliedfor_PINS 
-											!= '1' and ./instanceData/TXLife/A_PIOtherThanOwn != '1'">
-											<OwnPendingInsInd tc="0">False
-											</OwnPendingInsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnSameAsInsuredInd tc="0">False
-											</OwnSameAsInsuredInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_PIOtherThanOwn = '0'">
-											<OwnSameAsInsuredInd tc="1">True
-											</OwnSameAsInsuredInd>
-										</xsl:if>
-										<!-- BHFD-1145 -->
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnSoldTransLifeInd = '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnSoldTransLifePolicyInd tc="1">True
-											</OwnSoldTransLifePolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnSoldTransLifeInd != '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnSoldTransLifePolicyInd tc="0">False
-											</OwnSoldTransLifePolicyInd>
-										</xsl:if>
-										<!-- BHFD-1145 -->
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnSolicitedToSellInd = '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnSolicitedToSellInd tc="1">True
-											</OwnSolicitedToSellInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_OwnSolicitedToSellInd != '1' and ./instanceData/TXLife/A_PIOtherThanOwn = '1'">
-											<OwnSolicitedToSellInd tc="0">False
-											</OwnSolicitedToSellInd>
-										</xsl:if>
-										<!-- BHFD-1225 moved to insured.Risk -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_InforceNAppliedfor_PINS 
-											= '1'"> <PendingInsInd tc="1">True</PendingInsInd> </xsl:if> <xsl:if test="./instanceData/TXLife/A_InforceNAppliedfor_PINS 
-											!= '1'"> <PendingInsInd tc="0">False</PendingInsInd> </xsl:if> -->
-										<!-- BHFD-435 -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_HIVFormFormInd_AGT1 
-											= '1'"> <ProducerHIVNotice tc="1">Yes</ProducerHIVNotice> </xsl:if> <xsl:if 
-											test="./instanceData/TXLife/A_HIVFormFormInd_AGT1 = '0'"> <ProducerHIVNotice 
-											tc="2">No</ProducerHIVNotice> </xsl:if> <xsl:if test="./instanceData/TXLife/A_HIVFormFormInd_AGT1 
-											= '2'"> <ProducerHIVNotice tc="1009900001">NA</ProducerHIVNotice> </xsl:if> -->
-										<xsl:if
-											test="./instanceData/TXLife/A_SalesMaterialInd_AGT1 = '1'">
-											<ProducerAppropSaleMatInd tc="1">True
-											</ProducerAppropSaleMatInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_SalesMaterialInd_AGT1 = '0'">
-											<ProducerAppropSaleMatInd tc="0">False
-											</ProducerAppropSaleMatInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_1035ExchgFormInd_AGT1 = '1'">
-											<ProducerAttach1035Form tc="1">Yes
-											</ProducerAttach1035Form>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_1035ExchgFormInd_AGT1 = '0'">
-											<ProducerAttach1035Form tc="2">No
-											</ProducerAttach1035Form>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_1035ExchgFormInd_AGT1 = '2'">
-											<ProducerAttach1035Form
-												tc="1009900001">NA
-											</ProducerAttach1035Form>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ReplacementFormsInd_AGT1 = '1'">
-											<ProducerCompReplForm tc="1">Yes
-											</ProducerCompReplForm>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ReplacementFormsInd_AGT1 = '0'">
-											<ProducerCompReplForm tc="2">No
-											</ProducerCompReplForm>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ReplacementFormsInd_AGT1 = '2'">
-											<ProducerCompReplForm tc="1009900001">NA
-											</ProducerCompReplForm>
-										</xsl:if>
-										<!-- BHFD-435 -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_CritDisclosureFormInd_AGT1 
-											= '1'"> <ProducerCritIllnessDiscl tc="1">Yes</ProducerCritIllnessDiscl> </xsl:if> 
-											<xsl:if test="./instanceData/TXLife/A_CritDisclosureFormInd_AGT1 = '0'"> 
-											<ProducerCritIllnessDiscl tc="2">No</ProducerCritIllnessDiscl> </xsl:if> 
-											<xsl:if test="./instanceData/TXLife/A_CritDisclosureFormInd_AGT1 = '2'"> 
-											<ProducerCritIllnessDiscl tc="1009900001">NA</ProducerCritIllnessDiscl> </xsl:if> -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_LifeGuideFormInd_AGT1 
-											= '1'"> <ProducerLifeBuyerGdInd tc="1">Yes</ProducerLifeBuyerGdInd> </xsl:if> 
-											<xsl:if test="./instanceData/TXLife/A_LifeGuideFormInd_AGT1 = '0'"> <ProducerLifeBuyerGdInd 
-											tc="2">No</ProducerLifeBuyerGdInd> </xsl:if> <xsl:if test="./instanceData/TXLife/A_LifeGuideFormInd_AGT1 
-											= '2'"> <ProducerLifeBuyerGdInd tc="1009900001">NA</ProducerLifeBuyerGdInd> 
-											</xsl:if> <xsl:if test="./instanceData/TXLife/A_LongDisclosureFormInd_AGT1 
-											= '1'"> <ProducerLTCDiscl tc="1">Yes</ProducerLTCDiscl> </xsl:if> <xsl:if 
-											test="./instanceData/TXLife/A_LongDisclosureFormInd_AGT1 = '0'"> <ProducerLTCDiscl 
-											tc="2">No</ProducerLTCDiscl> </xsl:if> <xsl:if test="./instanceData/TXLife/A_LongDisclosureFormInd_AGT1 
-											= '2'"> <ProducerLTCDiscl tc="1009900001">NA</ProducerLTCDiscl> </xsl:if> 
-											<xsl:if test="./instanceData/TXLife/A_PrivNoticeFormInd_AGT1 = '1'"> <ProducerPrivacyNotInd 
-											tc="1">Yes</ProducerPrivacyNotInd> </xsl:if> <xsl:if test="./instanceData/TXLife/A_PrivNoticeFormInd_AGT1 
-											= '0'"> <ProducerPrivacyNotInd tc="2">No</ProducerPrivacyNotInd> </xsl:if> 
-											<xsl:if test="./instanceData/TXLife/A_PrivNoticeFormInd_AGT1 = '2'"> <ProducerPrivacyNotInd 
-											tc="1009900001">NA</ProducerPrivacyNotInd> </xsl:if> -->
-										<xsl:if
-											test="./instanceData/TXLife/A_AppCompletion_AGT1 = '1'">
-											<ProducerSeeAllPersonsInd tc="1">True
-											</ProducerSeeAllPersonsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_AppCompletion_AGT1 = '0'">
-											<ProducerSeeAllPersonsInd tc="0">False
-											</ProducerSeeAllPersonsInd>
-										</xsl:if>
-										<!-- BHFD-435 -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_TempReceiptFormInd_AGT1 
-											= '1'"> <ProducerTIAReceipt tc="1">Yes</ProducerTIAReceipt> </xsl:if> <xsl:if 
-											test="./instanceData/TXLife/A_TempReceiptFormInd_AGT1 = '0'"> <ProducerTIAReceipt 
-											tc="2">No</ProducerTIAReceipt> </xsl:if> <xsl:if test="./instanceData/TXLife/A_TempReceiptFormInd_AGT1 
-											= '2'"> <ProducerTIAReceipt tc="1009900001">NA</ProducerTIAReceipt> </xsl:if> -->
-										<xsl:if
-											test="./instanceData/TXLife/A_TobaccoInd_PINS = '1'">
-											<SmokingInd tc="1">True</SmokingInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_TobaccoInd_PINS != '1'">
-											<SmokingInd tc="0">False</SmokingInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_SoldTransLifeInd_PINS = '1'">
-											<SoldTransLifePolicyInd tc="1">True
-											</SoldTransLifePolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_SoldTransLifeInd_PINS != '1'">
-											<SoldTransLifePolicyInd tc="0">False
-											</SoldTransLifePolicyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_SolicitedToSellInd_PINS = '1'">
-											<SolicitedToSellInd tc="1">True
-											</SolicitedToSellInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_SolicitedToSellInd_PINS != '1'">
-											<SolicitedToSellInd tc="0">False
-											</SolicitedToSellInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ForeignTravelInd_PINS = '1'">
-											<WrkOutsideUSOrCanadaLast2YrsInd
-												tc="1">True</WrkOutsideUSOrCanadaLast2YrsInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ForeignTravelInd_PINS = '0'">
-											<WrkOutsideUSOrCanadaLast2YrsInd
-												tc="0">False</WrkOutsideUSOrCanadaLast2YrsInd>
 										</xsl:if>
 										<xsl:if
 											test="string-length(./instanceData/TXLife/A_WorkItemID) >  0">
@@ -931,158 +529,61 @@
 												</xsl:when>
 											</xsl:choose>
 										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_FutureChildBeneInd = '1'">
-											<FutureChildInd tc="1">True</FutureChildInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_FutureChildBeneInd = '0'">
-											<FutureChildInd tc="0">False</FutureChildInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_BeneMatchInd = '1'">
-											<BeneficiariesMatchInd tc="1">True
-											</BeneficiariesMatchInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_BeneMatchInd = '0'">
-											<BeneficiariesMatchInd tc="0">False
-											</BeneficiariesMatchInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_TIASignatureOK = '1'">
-											<TIASignedInd tc="1">True</TIASignedInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_TIASignatureOK = '0'">
-											<TIASignedInd tc="0">False</TIASignedInd>
-										</xsl:if>
-										<!--BHFD-390 START -->
-										<xsl:if
-											test="./instanceData/TXLife/A_ThirdPartyPayorSignatureOK = '1'">
-											<AppSignedByThirdPartyInd tc="1">True
-											</AppSignedByThirdPartyInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_ThirdPartyPayorSignatureOK = '0'">
-											<AppSignedByThirdPartyInd tc="0">False
-											</AppSignedByThirdPartyInd>
-										</xsl:if>
-										<!--BHFD-390 END -->
-										<xsl:if
-											test="string-length(instanceData/TXLife/A_RecieptDate_TIA)>0">
-											<TIAReceiptDate>
-												<xsl:call-template name="FormatDate">
-													<xsl:with-param name="Separator">
-														/
-													</xsl:with-param>
-													<xsl:with-param name="DateString">
-														<xsl:value-of
-															select="instanceData/TXLife/A_RecieptDate_TIA" />
-													</xsl:with-param>
-												</xsl:call-template>
-											</TIAReceiptDate>
-										</xsl:if>
-										<FATCA>
-											<xsl:value-of
-												select="instanceData/TXLife/A_FATCACode" />
-										</FATCA>
-										<xsl:if
-											test="string-length(instanceData/TXLife/A_CaseID)>0">
-											<CaseID>
-												<xsl:value-of
-													select="instanceData/TXLife/A_CaseID" />
-											</CaseID>
-										</xsl:if>
-										<xsl:if
-											test="string-length(instanceData/TXLife/A_CustomerID)>0">
-											<CustomerID>
-												<xsl:value-of
-													select="instanceData/TXLife/A_CustomerID" />
-											</CustomerID>
-										</xsl:if>
-										<!--BHFD-1147 -->
-										<xsl:if
-											test="./instanceData/TXLife/A_NotToCompleteInd = '1'">
-											<ChooseNotToCompleteInd tc="1">True
-											</ChooseNotToCompleteInd>
-										</xsl:if>
-										<xsl:if
-											test="./instanceData/TXLife/A_FinRepAdvisementInd = '1'">
-											<FinRepAdvisementInd tc="1">True
-											</FinRepAdvisementInd>
-										</xsl:if>
 									</ApplicationInfoExtension>
 								</OLifEExtension>
 							</ApplicationInfo>
+							<OLifEExtension ExtensionCode="ApplicationInfo"
+								VendorCode="478">
+								<ApplicationInfoExtension>
+									<xsl:if
+										test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
+										<IllustrationID>
+											<xsl:value-of
+												select="instanceData/TXLife/A_IllustrationIDNum" />
+										</IllustrationID>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
+										<JtAppOwnerSignatureOK tc="0">False
+										</JtAppOwnerSignatureOK>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '1'">
+										<JtAppOwnerSignatureOK tc="1">True
+										</JtAppOwnerSignatureOK>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_PISignatureOK = '0'">
+										<AnnuitantSignatureOK tc="0">False
+										</AnnuitantSignatureOK>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_PISignatureOK = '1'">
+										<AnnuitantSignatureOK tc="1">True
+										</AnnuitantSignatureOK>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
+										<JtAnnuitantSignatureOK tc="0">False
+										</JtAnnuitantSignatureOK>
+									</xsl:if>
+									<xsl:if
+										test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
+										<JtAnnuitantSignatureOK tc="1">True
+										</JtAnnuitantSignatureOK>
+									</xsl:if>
+								</ApplicationInfoExtension>
+							</OLifEExtension>
 							<OLifEExtension ExtensionCode="Policy 2.8.90"
 								VendorCode="05">
 								<PolicyExtension>
 									<xsl:if test="./instanceData/TXLife/A_EDElected = '1'">
-										<!-- Updated By Puja -->
-										<AuthElectDocDeliveryInd tc="0">False
-										</AuthElectDocDeliveryInd>
+										<AuthElectDocDelivery tc="1">True
+										</AuthElectDocDelivery>
 									</xsl:if>
-									<xsl:if test="./instanceData/TXLife/A_EDElected = '0'">
-										<AuthElectDocDeliveryInd tc="1">True
-										</AuthElectDocDeliveryInd>
-										<!-- Updated By Puja -->
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_LTDPayOption != '-1'">
-										<NLGPeriod>
-											<xsl:attribute name="tc">
-												<xsl:value-of
-												select="instanceData/TXLife/A_LTDPayOption" />
-											</xsl:attribute>
-											<xsl:value-of
-												select="instanceData/TXLife/A_LTDPayOption_Desc" />
-										</NLGPeriod>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_PlannedFirstYrLump)>0">
-										<xsl:choose>
-											<xsl:when
-												test="contains(instanceData/TXLife/A_PlannedFirstYrLump ,'$')">
-												<PlannedFirstYrLump>
-													<xsl:value-of
-														select="translate(substring-after(instanceData/TXLife/A_PlannedFirstYrLump, '$'),',','')" />
-												</PlannedFirstYrLump>
-											</xsl:when>
-											<xsl:when
-												test="not(contains(instanceData/TXLife/A_PlannedFirstYrLump ,'$'))">
-												<PlannedFirstYrLump>
-													<xsl:value-of
-														select="translate(instanceData/TXLife/A_PlannedFirstYrLump,',','')" />
-												</PlannedFirstYrLump>
-											</xsl:when>
-										</xsl:choose>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_PlannedYearlyPrem)>0">
-										<xsl:choose>
-											<xsl:when
-												test="contains(instanceData/TXLife/A_PlannedYearlyPrem ,'$')">
-												<PlannedYearlyPrem>
-													<xsl:value-of
-														select="translate(substring-after(instanceData/TXLife/A_PlannedYearlyPrem, '$'),',','')" />
-												</PlannedYearlyPrem>
-											</xsl:when>
-											<xsl:when
-												test="not(contains(instanceData/TXLife/A_PlannedYearlyPrem ,'$'))">
-												<PlannedYearlyPrem>
-													<xsl:value-of
-														select="translate(instanceData/TXLife/A_PlannedYearlyPrem,',','')" />
-												</PlannedYearlyPrem>
-											</xsl:when>
-										</xsl:choose>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_ElectACVR = '1' and ./instanceData/TXLife/A_DeclineACVR != '1'">
-										<RebalancingInd tc="1">True</RebalancingInd>
-									</xsl:if>
-									<xsl:if test="./instanceData/TXLife/A_DeclineACVR = '1'">
-										<RebalancingInd tc="0">False</RebalancingInd>
+									<xsl:if test="./instanceData/TXLife/A_EDElected != '1'">
+										<AuthElectDocDelivery tc="0">False
+										</AuthElectDocDelivery>
 									</xsl:if>
 								</PolicyExtension>
 							</OLifEExtension>
@@ -1105,6 +606,10 @@
 												<ProductCode>
 													<xsl:value-of select="$pos" />
 												</ProductCode>
+												<AllocPercent>
+													<xsl:value-of
+														select="../*[name()=concat('A_AllocPercent_',$pos)]" />
+												</AllocPercent>
 											</SubAccount>
 										</xsl:if>
 									</xsl:if>
@@ -3101,14 +2606,12 @@
 							</RelationRoleCode><!-- Citation needed for actual tc value -->
 							<xsl:if
 								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA ='1'">
-								<RelationDescription tc="900">Spouse</RelationDescription>
+								<RelationDescription tc="900">Spouse
+								</RelationDescription>
 							</xsl:if>
 							<!-- Need confirmation for non spousal IRA -->
-							<!-- <xsl:if
-								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA ='2'">
-								<RelationDescription tc="?">?
-								</RelationDescription>
-							</xsl:if> -->
+							<!-- <xsl:if test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA 
+								='2'"> <RelationDescription tc="?">? </RelationDescription> </xsl:if> -->
 						</Relation>
 					</xsl:if>
 					<!-- Replacement relation holding/holding -->
@@ -3201,11 +2704,15 @@
 						</OriginatingObjectType>
 						<RelatedObjectType tc="6">Party</RelatedObjectType>
 						<RelationRoleCode tc="35">Annuitant</RelationRoleCode>
-						<xsl:if test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn != '1'">
-						<RelationDescription tc="91">Self</RelationDescription>
+						<xsl:if
+							test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn != '1'">
+							<RelationDescription tc="91">Self
+							</RelationDescription>
 						</xsl:if>
-						<xsl:if test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn = '1'">
-						<RelationDescription tc="2147483647">Other</RelationDescription>
+						<xsl:if
+							test="./instanceData/TXLife/A_ProductCode_Annuity = 'DP5LNO' and ./instanceData/TXLife/A_OwnOtherThanAnn = '1'">
+							<RelationDescription tc="2147483647">Other
+							</RelationDescription>
 						</xsl:if>
 					</Relation>
 					<!-- Owner Relation when Annuitant is Owner -->
@@ -3216,7 +2723,8 @@
 							</OriginatingObjectType>
 							<RelatedObjectType tc="6">Party</RelatedObjectType>
 							<RelationRoleCode tc="8">Owner</RelationRoleCode>
-							<RelationDescription tc="91">Self</RelationDescription>
+							<RelationDescription tc="91">Self
+							</RelationDescription>
 						</Relation>
 					</xsl:if>
 					<!-- OWN Relation -->
@@ -3233,10 +2741,13 @@
 								<xsl:if test="./instanceData/TXLife/A_OwnerType = '2'">
 									<xsl:attribute name="RelatedObjectID">Party_ENTITY</xsl:attribute>
 								</xsl:if>
-								<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
-								<RelatedObjectType tc="6">Party</RelatedObjectType>
+								<OriginatingObjectType tc="4">Holding
+								</OriginatingObjectType>
+								<RelatedObjectType tc="6">Party
+								</RelatedObjectType>
 								<RelationRoleCode tc="8">Owner</RelationRoleCode>
-								<RelationDescription tc="91">Self</RelationDescription>
+								<RelationDescription tc="91">Self
+								</RelationDescription>
 							</Relation>
 						</xsl:if>
 					</xsl:if>
@@ -3247,16 +2758,19 @@
 											string-length(./instanceData/TXLife/A_LastName_JointOwn) > 0 ">
 							<Relation id="Relation_OWN2"
 								OriginatingObjectID="Holding_1" RelatedObjectID="Party_JointOwn">
-								<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
-								<RelatedObjectType tc="6">Party</RelatedObjectType>
-								<RelationRoleCode tc="184">Joint Owner</RelationRoleCode>
+								<OriginatingObjectType tc="4">Holding
+								</OriginatingObjectType>
+								<RelatedObjectType tc="6">Party
+								</RelatedObjectType>
+								<RelationRoleCode tc="184">Joint Owner
+								</RelationRoleCode>
 								<RelationDescription>
 									<xsl:attribute name="tc">
 										<xsl:value-of
-											select="instanceData/TXLife/A_RelToOwner_JointOwn" />
+										select="instanceData/TXLife/A_RelToOwner_JointOwn" />
 									</xsl:attribute>
 									<xsl:value-of
-									select="instanceData/TXLife/A_RelToOwner_JointOwn_Desc" />
+										select="instanceData/TXLife/A_RelToOwner_JointOwn_Desc" />
 								</RelationDescription>
 							</Relation>
 						</xsl:if>
