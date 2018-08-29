@@ -9,8 +9,9 @@ public class BenePercentage {
 		int noBene = 7;
 		Map<String, String> BenePercentage = new HashMap<String, String>();
 		int totalpercentage=100;
+		int intPercentage;
 		for(int i=1;i<=noBene;i++) {
-			int intPercentage = totalpercentage/(noBene-i+1);
+			intPercentage = totalpercentage/(noBene-i+1);
 			BenePercentage.put("A_InterestPercent_BEN" + i, Integer.toString(intPercentage));
 			totalpercentage = totalpercentage - intPercentage;
 			}
