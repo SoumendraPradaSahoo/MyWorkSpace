@@ -1370,9 +1370,6 @@
 										</xsl:call-template>
 									</BirthDate>
 								</xsl:if>
-								<!-- <xsl:if test="string-length(../*[name()=concat('A_IDNum_OWN',$pos)]) 
-									> 0 and ../*[name()=concat('A_IDType_OWN',$pos)] = '17'"> <PassportNo> <xsl:value-of 
-									select="../*[name()=concat('A_IDNum_OWN',$pos)]" /> </PassportNo> </xsl:if> -->
 								<xsl:if
 									test="./instanceData/TXLife/A_Citizenship_OWN != '-1'">
 									<Citizenship>
@@ -1384,45 +1381,6 @@
 											select="./instanceData/TXLife/A_Citizenship_OWN_Desc" />
 									</Citizenship>
 								</xsl:if>
-								<!--xsl:if test="../*[name()=concat('A_Citizenship_OWN',$pos)] = 
-									'1'"> <Citizenship tc="1">United States of America</Citizenship> </xsl:if -->
-								<!-- <xsl:if test="../*[name()=concat('A_IDType_OWN',$pos)] = '29'"> 
-									<DriversLicenseNum> <xsl:value-of select="../*[name()=concat('A_IDNum_OWN',$pos)]" 
-									/> </DriversLicenseNum> <xsl:if test="../*[name()=concat('A_IssuerIDState_OWN',$pos)] 
-									!= '-1'"> <DriversLicenseState> <xsl:attribute name="tc"> <xsl:value-of select="../*[name()=concat('A_IssuerIDState_OWN',$pos)]" 
-									/> </xsl:attribute> <xsl:value-of select="../*[name()=concat('A_IssuerIDState_OWN',$pos, 
-									'_Desc')]" /> </DriversLicenseState> </xsl:if> </xsl:if> <OLifEExtension 
-									ExtensionCode="Party 2.8.90" VendorCode="05"> <PersonExtension> <xsl:if test="../*[name()=concat('A_ValidUSDL_OWN',$pos)]= 
-									'1'"> <ValidDLInd tc="1">true</ValidDLInd> </xsl:if> <xsl:if test="../*[name()=concat('A_ValidUSDL_OWN',$pos)]= 
-									'0'"> <ValidDLInd tc="0">false</ValidDLInd> </xsl:if> <xsl:if test="../*[name()=concat('A_IDType_OWN',$pos)] 
-									!= '29' and ../*[name()=concat('A_IDType_OWN',$pos)] != '-1' "> <GovtIDInfo> 
-									<xsl:attribute name="id"> <xsl:value-of select="concat('GovtIDInfo_OWN',$pos)" 
-									/> </xsl:attribute> <GovtID> <xsl:value-of select="../*[name()=concat('A_IDNum_OWN',$pos)]" 
-									/> </GovtID> Modified by Puja, BHFD-1112 Start <ExpDate> <xsl:call-template 
-									name="FormatDate"> <xsl:with-param name="Separator"> / </xsl:with-param> 
-									<xsl:with-param name="DateString"> <xsl:value-of select="../*[name()=concat('A_IDExpirationDate_OWN',$pos)]" 
-									/> </xsl:with-param> </xsl:call-template> </ExpDate> <IssueDate> <xsl:call-template 
-									name="FormatDate"> <xsl:with-param name="Separator"> / </xsl:with-param> 
-									<xsl:with-param name="DateString"> <xsl:value-of select="../*[name()=concat('A_IDIssueDate_OWN',$pos)]" 
-									/> </xsl:with-param> </xsl:call-template> </IssueDate> Modified by Puja, 
-									BHFD-1112 End <xsl:if test="../*[name()=concat('A_IDType_OWN',$pos)] != '-1'"> 
-									<GovtIDTC> <xsl:attribute name="tc"> <xsl:value-of select="../*[name()=concat('A_IDType_OWN',$pos)]" 
-									/> </xsl:attribute> <xsl:value-of select="../*[name()=concat('A_IDType_OWN',$pos, 
-									'_Desc')]" /> </GovtIDTC> </xsl:if> <xsl:if test="../*[name()=concat('A_IssuerIDCountry_OWN',$pos)] 
-									!= '-1'"> <Nation> <xsl:attribute name="tc"> <xsl:value-of select="../*[name()=concat('A_IssuerIDCountry_OWN',$pos)]" 
-									/> </xsl:attribute> <xsl:value-of select="../*[name()=concat('A_IssuerIDCountry_OWN',$pos, 
-									'_Desc')]" /> </Nation> </xsl:if> <xsl:if test="../*[name()=concat('A_IssuerIDState_OWN',$pos)] 
-									!= '-1'"> <Jurisdiction> <xsl:attribute name="tc"> <xsl:value-of select="../*[name()=concat('A_IssuerIDState_OWN',$pos)]" 
-									/> </xsl:attribute> <xsl:value-of select="../*[name()=concat('A_IssuerIDState_OWN',$pos, 
-									'_Desc')]" /> </Jurisdiction> </xsl:if> BHFD-1112 renamed TAG and moved up 
-									the position <GovtIDIssDate> <xsl:call-template name="FormatDate"> <xsl:with-param 
-									name="Separator"> / </xsl:with-param> <xsl:with-param name="DateString"> 
-									<xsl:value-of select="../*[name()=concat('A_IDIssueDate_OWN',$pos)]" /> </xsl:with-param> 
-									</xsl:call-template> </GovtIDIssDate> <GovtIDExpDate> <xsl:call-template 
-									name="FormatDate"> <xsl:with-param name="Separator"> / </xsl:with-param> 
-									<xsl:with-param name="DateString"> <xsl:value-of select="../*[name()=concat('A_IDExpiratnDate_OWN',$pos)]" 
-									/> </xsl:with-param> </xsl:call-template> </GovtIDExpDate> </GovtIDInfo> 
-									</xsl:if> </PersonExtension> </OLifEExtension> -->
 							</Person>
 							<Address id="Address_OWN1">
 								<AddressTypeCode tc="1">Home</AddressTypeCode>
@@ -1512,11 +1470,6 @@
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
-							<!-- <xsl:if test="string-length(../*[name()=concat('A_EmailAddress1_OWN',$pos)]) 
-								> 0 and ../A_EDElected = '0'"> <EMailAddress> <xsl:attribute name="id"> <xsl:value-of 
-								select="concat('EMailAddress2_OWN',$pos)" /> </xsl:attribute> <EMailType 
-								tc="1000500001">eDelivery</EMailType> <AddrLine> <xsl:value-of select="../*[name()=concat('A_EmailAddress1_OWN',$pos)]" 
-								/> </AddrLine> </EMailAddress> </xsl:if> -->
 						</Party>
 					</xsl:if>
 					<!-- Entity OWN Party -->
@@ -1670,11 +1623,6 @@
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
-							<!-- <xsl:if test="../A_EDElected = '0' and string-length(../*[name()=concat('A_EmailAddress_OWN',$pos)]) 
-								> 0"> <EMailAddress> <xsl:attribute name="id"> <xsl:value-of select="concat('EMailAddress2_OWN',$pos)" 
-								/> </xsl:attribute> <EMailType tc="1000500001">eDelivery</EMailType> <AddrLine> 
-								<xsl:value-of select="../*[name()=concat('A_EmailAddress_OWN',$pos)]" /> 
-								</AddrLine> </EMailAddress> </xsl:if> -->
 						</Party>
 					</xsl:if>
 					<!-- Entity OWN Party END -->

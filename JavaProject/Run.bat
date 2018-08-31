@@ -1,0 +1,1 @@
+java -cp D:\TestNG\*;D:\MyWorkSpace\JavaProject\bin org.testng.TestNG TestNgExecution.xml
