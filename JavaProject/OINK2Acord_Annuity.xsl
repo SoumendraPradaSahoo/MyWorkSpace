@@ -81,17 +81,21 @@
 							</xsl:if>
 							<xsl:choose>
 								<xsl:when
-									test="contains(instanceData/TXLife/A_PremiumWA ,'$')">
+									test="string-length(instanceData/TXLife/A_Total_Amount_PPAY) = 0 ">
+									<PaymentAmt>0</PaymentAmt>
+								</xsl:when>
+								<xsl:when
+									test="contains(instanceData/TXLife/A_Total_Amount_PPAY ,'$')">
 									<PaymentAmt>
 										<xsl:value-of
-											select="translate(substring-after(instanceData/TXLife/A_PremiumWA, '$'),',','')" />
+											select="translate(substring-after(instanceData/TXLife/A_Total_Amount_PPAY, '$'),',','')" />
 									</PaymentAmt>
 								</xsl:when>
 								<xsl:when
-									test="not(contains(instanceData/TXLife/A_PremiumWA ,'$'))">
+									test="not(contains(instanceData/TXLife/A_Total_Amount_PPAY ,'$'))">
 									<PaymentAmt>
 										<xsl:value-of
-											select="translate(instanceData/TXLife/A_PremiumWA,',','')" />
+											select="translate(instanceData/TXLife/A_Total_Amount_PPAY,',','')" />
 									</PaymentAmt>
 								</xsl:when>
 							</xsl:choose>
@@ -389,7 +393,8 @@
 										</xsl:otherwise>
 									</xsl:choose>
 									<SubmissionDate>
-										<xsl:value-of select="$current_date" />
+										<xsl:value-of
+											select="instanceData/TXLife/A_AppReceive_Date" />
 									</SubmissionDate>
 									<SubmissionTime>
 										<xsl:value-of select="$current_time" />
@@ -543,6 +548,34 @@
 										</IllustrationID>
 									</xsl:if>
 									<xsl:if
+											test="string-length(instanceData/TXLife/A_Illustration_Dt)>0">
+											<QuoteDate>
+												<xsl:call-template name="FormatDate">
+													<xsl:with-param name="Separator">
+														/
+													</xsl:with-param>
+													<xsl:with-param name="DateString">
+														<xsl:value-of
+															select="instanceData/TXLife/A_Illustration_Dt" />
+													</xsl:with-param>
+												</xsl:call-template>
+											</QuoteDate>
+										</xsl:if>
+										<xsl:if
+											test="string-length(instanceData/TXLife/A_Illustration_ExpiryDt)>0">
+											<QuoteExpireDt>
+												<xsl:call-template name="FormatDate">
+													<xsl:with-param name="Separator">
+														/
+													</xsl:with-param>
+													<xsl:with-param name="DateString">
+														<xsl:value-of
+															select="instanceData/TXLife/A_Illustration_ExpiryDt" />
+													</xsl:with-param>
+												</xsl:call-template>
+											</QuoteExpireDt>
+										</xsl:if>
+									<xsl:if
 										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
 										<JtAppOwnerSignatureOK tc="0">False
 										</JtAppOwnerSignatureOK>
@@ -585,6 +618,22 @@
 										<AuthElectDocDelivery tc="0">False
 										</AuthElectDocDelivery>
 									</xsl:if>
+									<xsl:choose>
+										<xsl:when
+											test="contains(instanceData/TXLife/A_PrevAccValue_DecedentIRA ,'$')">
+											<Prior-12-31-ACV>
+												<xsl:value-of
+													select="translate(substring-after(instanceData/TXLife/A_PrevAccValue_DecedentIRA, '$'),',','')" />
+											</Prior-12-31-ACV>
+										</xsl:when>
+										<xsl:when
+											test="not(contains(instanceData/TXLife/A_PrevAccValue_DecedentIRA ,'$'))">
+											<Prior-12-31-ACV>
+												<xsl:value-of
+													select="translate(instanceData/TXLife/A_PrevAccValue_DecedentIRA,',','')" />
+											</Prior-12-31-ACV>
+										</xsl:when>
+									</xsl:choose>
 								</PolicyExtension>
 							</OLifEExtension>
 						</Policy>
@@ -629,7 +678,7 @@
 								</SubAccount> </xsl:if> -->
 						</Investment>
 						<Arrangement id="Arrangment_1">
-							<ArrType tc="37">Standing Allocation</ArrType>
+							<ArrType tc="37">Premium Allocation</ArrType>
 							<xsl:for-each select="instanceData/TXLife/*">
 								<xsl:if test="starts-with(name(),'A_AllocPercent_')">
 									<xsl:if test="string-length(.) > 0">
@@ -3436,6 +3485,24 @@
 							</xsl:if>
 						</xsl:if>
 					</xsl:for-each>
+					<!--Form Instance and Relation for Application Version -->
+					<xsl:if
+						test="string-length(./instanceData/TXLife/A_ApplicationVersion)>0">
+						<FormInstance id="FormInstance_1"
+							RelatedObjectID="Party_PINS">
+							<ProviderFormNumber>
+								<xsl:value-of
+									select="./instanceData/TXLife/A_ApplicationVersion" />
+							</ProviderFormNumber>
+						</FormInstance>
+						<Relation id="Relation_Form_1"
+							OriginatingObjectID="FormInstance_1" RelatedObjectID="Party_PINS">
+							<OriginatingObjectType tc="101">FormInstance
+							</OriginatingObjectType>
+							<RelatedObjectType tc="6">Party</RelatedObjectType>
+							<RelationRoleCode tc="107">Form For</RelationRoleCode>
+						</Relation>
+					</xsl:if>
 				</OLifE>
 			</TXLifeRequest>
 		</TXLife>
