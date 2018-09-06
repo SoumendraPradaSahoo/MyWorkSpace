@@ -709,7 +709,6 @@
 												</xsl:when>
 											</xsl:choose>
 										</xsl:if>
-<<<<<<< HEAD
 										<xsl:if
 											test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
 											<IllustrationID>
@@ -778,81 +777,6 @@
 									</ApplicationInfoExtension>
 								</OLifEExtension>
 							</ApplicationInfo>
-=======
-									</ApplicationInfoExtension>
-								</OLifEExtension>
-							</ApplicationInfo>
-							<OLifEExtension ExtensionCode="ApplicationInfo"
-								VendorCode="478">
-								<ApplicationInfoExtension>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
-										<IllustrationID>
-											<xsl:value-of
-												select="instanceData/TXLife/A_IllustrationIDNum" />
-										</IllustrationID>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_Illustration_Dt)>0">
-										<QuoteDate>
-											<xsl:call-template name="FormatDate">
-												<xsl:with-param name="Separator">
-													/
-												</xsl:with-param>
-												<xsl:with-param name="DateString">
-													<xsl:value-of
-														select="instanceData/TXLife/A_Illustration_Dt" />
-												</xsl:with-param>
-											</xsl:call-template>
-										</QuoteDate>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_Illustration_ExpiryDt)>0">
-										<QuoteExpireDt>
-											<xsl:call-template name="FormatDate">
-												<xsl:with-param name="Separator">
-													/
-												</xsl:with-param>
-												<xsl:with-param name="DateString">
-													<xsl:value-of
-														select="instanceData/TXLife/A_Illustration_ExpiryDt" />
-												</xsl:with-param>
-											</xsl:call-template>
-										</QuoteExpireDt>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
-										<JtAppOwnerSignatureOK tc="0">False
-										</JtAppOwnerSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '1'">
-										<JtAppOwnerSignatureOK tc="1">True
-										</JtAppOwnerSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '0'">
-										<AnnuitantSignatureOK tc="0">False
-										</AnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '1'">
-										<AnnuitantSignatureOK tc="1">True
-										</AnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
-										<JtAnnuitantSignatureOK tc="0">False
-										</JtAnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
-										<JtAnnuitantSignatureOK tc="1">True
-										</JtAnnuitantSignatureOK>
-									</xsl:if>
-								</ApplicationInfoExtension>
-							</OLifEExtension>
->>>>>>> 20eb58b59e8a6819513d95558845fabc302a5730
 							<OLifEExtension ExtensionCode="Policy 2.8.90"
 								VendorCode="05">
 								<PolicyExtension>
@@ -939,15 +863,10 @@
 							<!--if Fixed account is not selected in Allocation screen for DCA, 
 								then manually creating the sub-account id -->
 							<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type='2'">
-<<<<<<< HEAD
 								<xsl:variable name="pos">
 									<xsl:value-of
 										select="instanceData/TXLife/A_DCA_From_Fund" />
 								</xsl:variable>
-=======
-								<xsl:variable name="pos"
-									select="instanceData/TXLife/A_DCA_From_Fund" />
->>>>>>> 20eb58b59e8a6819513d95558845fabc302a5730
 								<xsl:if
 									test="not(string-length(instanceData/TXLife/[name()=concat('A_AllocPercent_',$pos)])>0)
 							or instanceData/TXLife/[name()=concat('A_AllocPercent_',$pos)] = '0'">
