@@ -774,6 +774,13 @@
 											<JtAnnuitantSignatureOK tc="1">True
 											</JtAnnuitantSignatureOK>
 										</xsl:if>
+										<xsl:if
+											test="string-length(instanceData/TXLife/A_ClientAccNo)>0">
+											<CustomerID>
+												<xsl:value-of
+													select="instanceData/TXLife/A_ClientAccNo" />
+											</CustomerID>
+										</xsl:if>
 									</ApplicationInfoExtension>
 								</OLifEExtension>
 							</ApplicationInfo>
@@ -3755,10 +3762,13 @@
 											<OLifEExtension
 												ExtensionCode="Relation 2.8.90" VendorCode="05">
 												<RelationProducerExtension>
-													<!-- BHFD-529 -->
-													<!-- <xsl:if test="string-length(../*[name()=concat('A_ProfileCode_AGT',$pos)])>0 
-														"> <SituationCode> <xsl:value-of select="../*[name()=concat('A_ProfileCode_AGT',$pos)]" 
-														/> </SituationCode> </xsl:if> -->
+													<xsl:if
+														test="string-length(../*[name()=concat('A_ProfileCode_AGT',$pos)])>0">
+														<SituationCode>
+															<xsl:value-of
+																select="../*[name()=concat('A_ProfileCode_AGT',$pos)]" />
+														</SituationCode>
+													</xsl:if>
 													<xsl:if
 														test="$posValue = '1' and ../*[name()=concat('A_CompPlan_AGT',$pos)]!='-1'">
 														<CommissionOptCode>
@@ -3780,7 +3790,7 @@
 					</xsl:for-each>
 					<!--Form Instance and Relation for Application Version -->
 					<xsl:if
-						test="string-length(./instanceData/TXLife/A_ApplicationVersion)>0">
+						test="string-length(./instanceData/TXLife/A_ApplicationVersion)>0 and ./instanceData/TXLife/A_SignatureMethod = '1'">
 						<FormInstance id="FormInstance_1"
 							RelatedObjectID="Party_PINS">
 							<ProviderFormNumber>
