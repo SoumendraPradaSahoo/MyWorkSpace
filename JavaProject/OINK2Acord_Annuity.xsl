@@ -57,7 +57,8 @@
 							<!-- Citation Required -->
 							<ProductType>
 								<xsl:attribute name="tc">
-									<xsl:value-of select="instanceData/TXLife/A_PRODUCTCODE" />
+									<xsl:value-of
+									select="instanceData/TXLife/A_PRODUCTCODE" />
 								</xsl:attribute>
 								<xsl:value-of
 									select="instanceData/TXLife/A_PRODUCTCODE_Desc" />
