@@ -55,12 +55,21 @@
 							</xsl:if>
 							<LineOfBusiness tc="2">Annuity</LineOfBusiness>
 							<!-- Citation Required -->
-							<ProductType tc="11">Indexed Annuity</ProductType>
+							<ProductType>
+								<xsl:attribute name="tc">
+									<xsl:value-of select="instanceData/TXLife/A_PRODUCTCODE" />
+								</xsl:attribute>
+								<xsl:value-of
+									select="instanceData/TXLife/A_PRODUCTCODE_Desc" />
+							</ProductType>
 							<ProductCode>
 								<xsl:value-of
-									select="instanceData/TXLife/A_ProductCode_IA" />
+									select="instanceData/TXLife/A_ProductCode_Annuity" />
 							</ProductCode>
-							<CarrierCode>BHF</CarrierCode>
+							<CarrierCode>
+								<xsl:value-of
+									select="instanceData/TXLife/A_CarrierCode" />
+							</CarrierCode>
 							<ReplacementType>
 								<xsl:attribute name="tc">
 									<xsl:value-of
@@ -69,16 +78,10 @@
 								<xsl:value-of
 									select="instanceData/TXLife/A_ReplacmentType_LifeHolding_Desc" />
 							</ReplacementType>
-							<xsl:if test="./instanceData/TXLife/A_PaymentMode != '9'">
-								<PaymentMode>
-									<xsl:attribute name="tc">
-										<xsl:value-of
-										select="instanceData/TXLife/A_PaymentMode" />
-									</xsl:attribute>
-									<xsl:value-of
-										select="instanceData/TXLife/A_PaymentMode_Desc" />
-								</PaymentMode>
-							</xsl:if>
+							<!-- <xsl:if test="./instanceData/TXLife/A_PaymentMode != '9'"> <PaymentMode> 
+								<xsl:attribute name="tc"> <xsl:value-of select="instanceData/TXLife/A_PaymentMode" 
+								/> </xsl:attribute> <xsl:value-of select="instanceData/TXLife/A_PaymentMode_Desc" 
+								/> </PaymentMode> </xsl:if> -->
 							<xsl:choose>
 								<xsl:when
 									test="string-length(instanceData/TXLife/A_Total_Amount_PPAY) = 0 ">
@@ -99,25 +102,13 @@
 									</PaymentAmt>
 								</xsl:when>
 							</xsl:choose>
-							<xsl:choose>
-								<xsl:when
-									test="./instanceData/TXLife/A_Wire_MPREM = '1009900004' ">
-									<PaymentMethod tc="2">Wire Transfer</PaymentMethod>
-								</xsl:when>
-								<xsl:when
-									test="./instanceData/TXLife/A_Check_MPREM = '1009900003' ">
-									<PaymentMethod tc="2">Check</PaymentMethod>
-								</xsl:when>
-								<xsl:when
-									test="./instanceData/TXLife/A_EFT_MPREM = '7' ">
-									<PaymentMethod tc="7">Electronic Fund Transfer
-									</PaymentMethod>
-								</xsl:when>
-								<xsl:when
-									test="./instanceData/TXLife/TXLife/A_PaymentMode = '9'">
-									<PaymentMethod tc="20">Single Premium</PaymentMethod>
-								</xsl:when>
-							</xsl:choose>
+							<!-- <xsl:choose> <xsl:when test="./instanceData/TXLife/A_Wire_MPREM 
+								= '1009900004' "> <PaymentMethod tc="2">Wire Transfer</PaymentMethod> </xsl:when> 
+								<xsl:when test="./instanceData/TXLife/A_Check_MPREM = '1009900003' "> <PaymentMethod 
+								tc="2">Check</PaymentMethod> </xsl:when> <xsl:when test="./instanceData/TXLife/A_EFT_MPREM 
+								= '7' "> <PaymentMethod tc="7">Electronic Fund Transfer </PaymentMethod> 
+								</xsl:when> <xsl:when test="./instanceData/TXLife/TXLife/A_PaymentMode = 
+								'9'"> <PaymentMethod tc="20">Single Premium</PaymentMethod> </xsl:when> </xsl:choose> -->
 							<xsl:if
 								test="./instanceData/TXLife/A_CashWithAppInd = '1' ">
 								<PaymentDraftDay>
@@ -126,8 +117,14 @@
 								</PaymentDraftDay>
 							</xsl:if>
 							<Annuity>
-								<!-- Citation Required -->
-								<PremType tc="1">Single</PremType>
+								<PremType>
+									<xsl:attribute name="tc">
+												<xsl:value-of
+										select="instanceData/TXLife/A_PremType" />
+											</xsl:attribute>
+									<xsl:value-of
+										select="instanceData/TXLife/A_PremType_Desc" />
+								</PremType>
 								<QualPlanType>
 									<xsl:attribute name="tc">
 												<xsl:value-of
@@ -138,20 +135,20 @@
 								</QualPlanType>
 								<!-- Citation Required -->
 								<xsl:if
-									test="string-length(instanceData/TXLife/A_AmtCollected_TIA)>0 ">
+									test="string-length(instanceData/TXLife/A_TotalWithdrawal)>0 ">
 									<xsl:choose>
 										<xsl:when
-											test="contains(instanceData/TXLife/A_AmtCollected_TIA ,'$')">
+											test="contains(instanceData/TXLife/A_TotalWithdrawal ,'$')">
 											<InitialPremAmt>
 												<xsl:value-of
-													select="translate(substring-after(instanceData/TXLife/A_AmtCollected_TIA, '$'),',','')" />
+													select="translate(substring-after(instanceData/TXLife/A_TotalWithdrawal, '$'),',','')" />
 											</InitialPremAmt>
 										</xsl:when>
 										<xsl:when
-											test="not(contains(instanceData/TXLife/A_AmtCollected_TIA ,'$'))">
+											test="not(contains(instanceData/TXLife/A_TotalWithdrawal ,'$'))">
 											<InitialPremAmt>
 												<xsl:value-of
-													select="translate(instanceData/TXLife/A_AmtCollected_TIA,',','')" />
+													select="translate(instanceData/TXLife/A_TotalWithdrawal,',','')" />
 											</InitialPremAmt>
 										</xsl:when>
 									</xsl:choose>
@@ -711,79 +708,74 @@
 												</xsl:when>
 											</xsl:choose>
 										</xsl:if>
+										<xsl:if
+											test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
+											<IllustrationID>
+												<xsl:value-of
+													select="instanceData/TXLife/A_IllustrationIDNum" />
+											</IllustrationID>
+										</xsl:if>
+										<xsl:if
+											test="string-length(instanceData/TXLife/A_Illustration_Dt)>0">
+											<QuoteDate>
+												<xsl:call-template name="FormatDate">
+													<xsl:with-param name="Separator">
+														/
+													</xsl:with-param>
+													<xsl:with-param name="DateString">
+														<xsl:value-of
+															select="instanceData/TXLife/A_Illustration_Dt" />
+													</xsl:with-param>
+												</xsl:call-template>
+											</QuoteDate>
+										</xsl:if>
+										<xsl:if
+											test="string-length(instanceData/TXLife/A_Illustration_ExpiryDt)>0">
+											<QuoteExpireDt>
+												<xsl:call-template name="FormatDate">
+													<xsl:with-param name="Separator">
+														/
+													</xsl:with-param>
+													<xsl:with-param name="DateString">
+														<xsl:value-of
+															select="instanceData/TXLife/A_Illustration_ExpiryDt" />
+													</xsl:with-param>
+												</xsl:call-template>
+											</QuoteExpireDt>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
+											<JtAppOwnerSignatureOK tc="0">False
+											</JtAppOwnerSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointOwnerSignatureOK = '1'">
+											<JtAppOwnerSignatureOK tc="1">True
+											</JtAppOwnerSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_PISignatureOK = '0'">
+											<AnnuitantSignatureOK tc="0">False
+											</AnnuitantSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_PISignatureOK = '1'">
+											<AnnuitantSignatureOK tc="1">True
+											</AnnuitantSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
+											<JtAnnuitantSignatureOK tc="0">False
+											</JtAnnuitantSignatureOK>
+										</xsl:if>
+										<xsl:if
+											test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
+											<JtAnnuitantSignatureOK tc="1">True
+											</JtAnnuitantSignatureOK>
+										</xsl:if>
 									</ApplicationInfoExtension>
 								</OLifEExtension>
 							</ApplicationInfo>
-							<OLifEExtension ExtensionCode="ApplicationInfo"
-								VendorCode="478">
-								<ApplicationInfoExtension>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
-										<IllustrationID>
-											<xsl:value-of
-												select="instanceData/TXLife/A_IllustrationIDNum" />
-										</IllustrationID>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_Illustration_Dt)>0">
-										<QuoteDate>
-											<xsl:call-template name="FormatDate">
-												<xsl:with-param name="Separator">
-													/
-												</xsl:with-param>
-												<xsl:with-param name="DateString">
-													<xsl:value-of
-														select="instanceData/TXLife/A_Illustration_Dt" />
-												</xsl:with-param>
-											</xsl:call-template>
-										</QuoteDate>
-									</xsl:if>
-									<xsl:if
-										test="string-length(instanceData/TXLife/A_Illustration_ExpiryDt)>0">
-										<QuoteExpireDt>
-											<xsl:call-template name="FormatDate">
-												<xsl:with-param name="Separator">
-													/
-												</xsl:with-param>
-												<xsl:with-param name="DateString">
-													<xsl:value-of
-														select="instanceData/TXLife/A_Illustration_ExpiryDt" />
-												</xsl:with-param>
-											</xsl:call-template>
-										</QuoteExpireDt>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
-										<JtAppOwnerSignatureOK tc="0">False
-										</JtAppOwnerSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointOwnerSignatureOK = '1'">
-										<JtAppOwnerSignatureOK tc="1">True
-										</JtAppOwnerSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '0'">
-										<AnnuitantSignatureOK tc="0">False
-										</AnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_PISignatureOK = '1'">
-										<AnnuitantSignatureOK tc="1">True
-										</AnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
-										<JtAnnuitantSignatureOK tc="0">False
-										</JtAnnuitantSignatureOK>
-									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
-										<JtAnnuitantSignatureOK tc="1">True
-										</JtAnnuitantSignatureOK>
-									</xsl:if>
-								</ApplicationInfoExtension>
-							</OLifEExtension>
 							<OLifEExtension ExtensionCode="Policy 2.8.90"
 								VendorCode="05">
 								<PolicyExtension>
@@ -2969,13 +2961,15 @@
 							<RelationRoleCode tc="1009900DCS">Deceased Original Owner
 							</RelationRoleCode><!-- Citation needed for actual tc value -->
 							<xsl:if
-								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA ='1'">
+								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA = '1'">
 								<RelationDescription tc="900">Spouse
 								</RelationDescription>
 							</xsl:if>
-							<!-- Need confirmation for non spousal IRA -->
-							<!-- <xsl:if test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA 
-								='2'"> <RelationDescription tc="?">? </RelationDescription> </xsl:if> -->
+							<xsl:if
+								test="(./instanceData/TXLife/A_IsSpousal_DecedentIRA = '2'">
+								<RelationDescription tc="2147483647">Other
+								</RelationDescription>
+							</xsl:if>
 						</Relation>
 					</xsl:if>
 					<!-- Replacement relation holding/holding -->
