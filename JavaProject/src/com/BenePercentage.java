@@ -12,7 +12,7 @@ public class BenePercentage {
 		int intPercentage;
 		for(int i=1;i<=noBene;i++) {
 			intPercentage = totalpercentage/(noBene-i+1);
-			BenePercentage.put("A_InterestPercent_BEN" + i , Integer.toString(intPercentage));
+			BenePercentage.put("A_InterestPercent_BEN" +  (noBene - i + 1) , Integer.toString(intPercentage));
 			totalpercentage = totalpercentage - intPercentage;
 			}
 		for(Map.Entry<String, String> entry : BenePercentage.entrySet())
