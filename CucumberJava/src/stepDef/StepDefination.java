@@ -1,8 +1,10 @@
 package stepDef;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -36,6 +38,16 @@ public class StepDefination {
 	@Then("^Verify Title$")
 	public void verify_Title() {
 		System.out.println(driver.getTitle());
+	}
+	
+	@Then("^Verify Title \"([^\"]*)\"$")
+	public void verify_Title(String string) {
+	    String title = driver.getTitle();
+	    try {
+	    Assert.assertTrue("Titles are equal", title.equalsIgnoreCase(string));
+	    }catch (Exception e) {
+	    	System.out.println(e.getMessage());
+	    }
 	}
 
 	@Then("^Close the browser$")

@@ -8,7 +8,7 @@ Feature: Test Search for Google
     Given Lunch Google in Browser
     When Search "Pritam"
     And Click on Search
-    Then Verify Title
+    Then Verify Title "Pritam1 - Google Search"
     And Close the browser
 
   @RegressionTest
