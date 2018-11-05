@@ -21,6 +21,7 @@ public class TestNGClass {
 		System.out.println(r.getName());
 	}
 	
+	System.out.println("Execution Completed");
 	}
 
 }
