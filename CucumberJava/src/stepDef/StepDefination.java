@@ -11,14 +11,13 @@ import cucumber.api.java.en.When;
 
 public class StepDefination {
 	WebDriver driver;
-	@Given("^Open Chrome Browser$")
+	@Given("Open Chrome Browser")
 	public void open_Chrome_Browser() {
 		driver=new ChromeDriver();
-
-
 	}
 
-	@Given("^Lunch Google in Browser$")
+
+	@Given("Lunch Google in Browser")
 	public void lunch_Google_in_Browser() {
 		driver.get("https://www.google.com/");
 		driver.manage().window().maximize();

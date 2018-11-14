@@ -7,7 +7,7 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
 		features = {"Feature"},
 		glue={"stepDef"},
-		tags= {"@SmokeTest"},			
+		tags= {"@RegressionTest"},			
 		plugin= {"html:Target/Report"}
 		)
 public class TestRunner {	 
