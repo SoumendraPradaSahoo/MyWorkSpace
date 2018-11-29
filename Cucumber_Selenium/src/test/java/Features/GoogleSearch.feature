@@ -17,6 +17,7 @@ Feature: Test Search for Google
     When Search "<SerachParameter>"
     And Click on Search
     Then Verify Title
+    Then Get the list of hyperlinks
     And Close the browser
 
     Examples: 
