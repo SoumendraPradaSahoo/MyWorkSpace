@@ -64,7 +64,7 @@
 							</xsl:if>
 							
 							<xsl:if test="instanceData/TXLife/A_PRODUCTCODE = '301' ">
-								<ProductType tc="9">Fixed Annuity</ProductType>
+								<ProductType tc = "9">Fixed Annuity</ProductType>
 							</xsl:if>
 							<ProductCode>
 								<xsl:value-of select="instanceData/TXLife/A_ProductCode_Annuity" />
@@ -77,12 +77,22 @@
 							<CarrierCode>
 								<xsl:value-of select="instanceData/TXLife/A_CarrierCode" />
 							</CarrierCode>
-							<ReplacementType>
-								<xsl:attribute name="tc">
-									<xsl:value-of select="instanceData/TXLife/A_ReplacmentType_LifeHolding" />
-								</xsl:attribute>
-								<xsl:value-of select="instanceData/TXLife/A_ReplacmentType_LifeHolding_Desc" />
-							</ReplacementType>
+							
+							<!-- BHFD-3975 -->
+							<xsl:choose>
+								<xsl:when test="instanceData/TXLife/A_ContractAppliedFor = '1009900004' or instanceData/TXLife/A_ContractAppliedFor = '1009900005'">
+									<ReplacementType tc="1000990011">Inherited Annuity</ReplacementType>
+								</xsl:when>
+								<xsl:otherwise>
+									<ReplacementType>
+										<xsl:attribute name="tc">
+											<xsl:value-of select="instanceData/TXLife/A_ReplacmentType_LifeHolding" />
+										</xsl:attribute>
+										<xsl:value-of select="instanceData/TXLife/A_ReplacmentType_LifeHolding_Desc" />
+									</ReplacementType>
+								</xsl:otherwise>
+							</xsl:choose>
+							
 							<!-- <xsl:if test="./instanceData/TXLife/A_PaymentMode != '9'"> <PaymentMode> 
 								<xsl:attribute name="tc"> <xsl:value-of select="instanceData/TXLife/A_PaymentMode" 
 								/> </xsl:attribute> <xsl:value-of select="instanceData/TXLife/A_PaymentMode_Desc" 
@@ -158,6 +168,15 @@
 								</xsl:if>
 								
 								<Payout id="Payout_1">
+									<IncomeOption>
+										<xsl:attribute name="tc">
+											<xsl:value-of select="instanceData/TXLife/A_LifeTime_IncomeOption" />
+										</xsl:attribute>
+										<xsl:value-of select="instanceData/TXLife/A_LifeTime_IncomeOption_Desc" />
+									</IncomeOption>
+									<NumModalPayouts>
+										<xsl:value-of select="instanceData/TXLife/A_LifeTime_Income_GuaranteeYear" />
+									</NumModalPayouts>
 									<PayoutMode>
 										<xsl:attribute name="tc">
 											<xsl:value-of select="instanceData/TXLife/A_IncomePayment_Freq" />
@@ -174,32 +193,85 @@
 											</xsl:call-template>
 										</StartDate>
 									</xsl:if>
-									<xsl:choose>
+									
+									<!-- BHFD-5859 -->
+									<xsl:if test="instanceData/TXLife/A_LifeTime_Income_SingleOrJoint = '2'">
+										<ContingentJoint>
+											<xsl:attribute name="tc">
+												<xsl:value-of select="instanceData/TXLife/A_PaymentPerc_Surviver" />
+											</xsl:attribute>
+											<xsl:value-of select="instanceData/TXLife/A_PaymentPerc_Surviver_Desc" />
+										</ContingentJoint>
+									</xsl:if>
+									
+									<!-- BHFD-5828 -->
+									<!-- <xsl:choose>
 										<xsl:when test="instanceData/TXLife/A_FederalTaxCB = '1'">
 											<TaxWithheldInd tc="0">False</TaxWithheldInd>
 										</xsl:when>
 										<xsl:when test="instanceData/TXLife/A_FederalTaxCB != '1' and (string-length(instanceData/TXLife/A_FederalTax_Withhold_Amt)>0 or string-length(instanceData/TXLife/A_FederalTax_Withhold_Per)>0 ) ">
 											<TaxWithheldInd tc="1">True</TaxWithheldInd>
 										</xsl:when>
-									</xsl:choose>
+									</xsl:choose> -->
 									<Participant id="PayoutParticipant_1" PartyID="Party_PINS">
 										<ParticipantRoleCode tc="27">Annuitant</ParticipantRoleCode>
 									</Participant>
-									<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+									<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+										(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 										<Participant id="PayoutParticipant_2" PartyID="Party_JNT">
 											<ParticipantRoleCode tc="28">Joint Annuitant</ParticipantRoleCode>
 										</Participant>
 									</xsl:if>
 									
-									<xsl:if test="string-length(instanceData/TXLife/A_FederalTax_Withhold_Amt)>0 or string-length(instanceData/TXLife/A_FederalTax_Withhold_Per)>0 ">
-										<TaxWithholding id="TaxWithholding_1">
+									<!-- BHFD-5828 -->
+									<xsl:if test="instanceData/TXLife/A_FederalTaxCB != '1' and instanceData/TXLife/A_PRODUCTCODE = '301'">
+										<TaxWithholding id="TaxWithholding_Federal_Standard">
 											<TaxWithholdingPlace tc="1">Federal Tax</TaxWithholdingPlace>
-											<TaxWithholdingType>
-												<xsl:attribute name="tc">
-													<xsl:value-of select="instanceData/TXLife/A_FederalTax_Withhold_Type" />
-												</xsl:attribute>
-												<xsl:value-of select="instanceData/TXLife/A_FederalTax_Withhold_Type_Desc" />
-											</TaxWithholdingType>
+											<TaxWithholdingType tc="1">Standard</TaxWithholdingType>
+											<xsl:if test="instanceData/TXLife/A_FedTax_Withhold_Other = '6' ">
+												<TaxWithheldPct>
+													<xsl:value-of select="instanceData/TXLife/A_FedTax_Withhold_OtherPercent" />
+												</TaxWithheldPct>
+											</xsl:if>
+											<xsl:if test="instanceData/TXLife/A_FedTax_Withhold_Other = '8' ">
+												<xsl:choose>
+													<xsl:when test="contains(instanceData/TXLife/A_FedTax_Withhold_OtherAmt ,'$')">
+														<TaxWithheldAmt>
+															<xsl:value-of select="translate(substring-after(instanceData/TXLife/A_FedTax_Withhold_OtherAmt, '$'),',','')" />
+														</TaxWithheldAmt>
+													</xsl:when>
+													<xsl:when test="not(contains(instanceData/TXLife/A_FedTax_Withhold_OtherAmt ,'$'))">
+														<TaxWithheldAmt>
+															<xsl:value-of select="translate(instanceData/TXLife/A_FedTax_Withhold_OtherAmt,',','')" />
+														</TaxWithheldAmt>
+													</xsl:when>
+												</xsl:choose>
+											</xsl:if>
+											<!-- BHFD-3732 -->
+											<WithholdingNumExemptions>
+												<xsl:value-of select="instanceData/TXLife/A_FederalTax_Allowances_Claim" />
+											</WithholdingNumExemptions>
+											<OLifEExtension ExtensionCode="TaxWithholding 2.8.90" VendorCode="05">
+												<TaxWithholdingExtension>
+													<FedTaxMarStat>													
+														<xsl:if test="string-length(./instanceData/TXLife/A_FederalTax_Marital_Status)>0">
+															<xsl:attribute name="tc">
+																<xsl:value-of select="instanceData/TXLife/A_FederalTax_Marital_Status" />
+															</xsl:attribute>
+															<xsl:value-of select="instanceData/TXLife/A_FederalTax_Marital_Status_Desc" />
+														</xsl:if>
+													</FedTaxMarStat>
+												</TaxWithholdingExtension>
+											</OLifEExtension>
+										</TaxWithholding>
+									</xsl:if>
+									
+									<!-- BHFD-5828 -->
+									<xsl:if test="instanceData/TXLife/A_FederalTaxCB != '1' and instanceData/TXLife/A_PRODUCTCODE = '301' and 
+										(instanceData/TXLife/A_FederalTax_Withhold_Type = '6' or instanceData/TXLife/A_FederalTax_Withhold_Type = '8')">
+										<TaxWithholding id="TaxWithholding_Federal_Additional">
+											<TaxWithholdingPlace tc="1">Federal Tax</TaxWithholdingPlace>
+											<TaxWithholdingType tc="2">Backup</TaxWithholdingType>
 											<xsl:if test="instanceData/TXLife/A_FederalTax_Withhold_Type = '6' ">
 												<TaxWithheldPct>
 													<xsl:value-of select="instanceData/TXLife/A_FederalTax_Withhold_Per" />
@@ -219,31 +291,15 @@
 													</xsl:when>
 												</xsl:choose>
 											</xsl:if>
-											<OLifEExtension ExtensionCode="TaxWithholding 2.8.90" VendorCode="05">
-												<TaxWithholdingExtension>
-													<FedTaxMarStat>
-														<xsl:attribute name="tc">
-															<xsl:value-of select="instanceData/TXLife/A_FederalTax_Marital_Status" />
-														</xsl:attribute>
-														<xsl:value-of select="instanceData/TXLife/A_FederalTax_Marital_Status_Desc" />
-													</FedTaxMarStat>
-													<WithholdingNumExemptions>
-														<xsl:value-of select="instanceData/TXLife/A_FederalTax_Allowances_Claim" />
-													</WithholdingNumExemptions>
-												</TaxWithholdingExtension>
-											</OLifEExtension>
 										</TaxWithholding>
 									</xsl:if>
 									
-									<xsl:if test="string-length(instanceData/TXLife/A_StateTax_Withhold_Amt)>0 or string-length(instanceData/TXLife/A_StateTax_Withhold_Per)>0 ">
-										<TaxWithholding id="TaxWithholding_2">
+									<!-- BHFD-5828 -->
+									<xsl:if test="instanceData/TXLife/A_StateTaxCB != '1' and instanceData/TXLife/A_PRODUCTCODE = '301' and 
+										(instanceData/TXLife/A_StateTax_Withhold_Type = '6' or instanceData/TXLife/A_StateTax_Withhold_Type = '8')">
+										<TaxWithholding id="TaxWithholding_State_Standard">
 											<TaxWithholdingPlace tc="2">State Tax</TaxWithholdingPlace>
-											<TaxWithholdingType>
-												<xsl:attribute name="tc">
-													<xsl:value-of select="instanceData/TXLife/A_StateTax_Withhold_Type" />
-												</xsl:attribute>
-												<xsl:value-of select="instanceData/TXLife/A_StateTax_Withhold_Type_Desc" />
-											</TaxWithholdingType>
+											<TaxWithholdingType tc="1">Standard</TaxWithholdingType>
 											<xsl:if test="instanceData/TXLife/A_StateTax_Withhold_Type = '6' ">
 												<TaxWithheldPct>
 													<xsl:value-of select="instanceData/TXLife/A_StateTax_Withhold_Per" />
@@ -268,7 +324,7 @@
 									
 									<OLifEExtension ExtensionCode="Payout 2.8.90" VendorCode="05">
 										<PayoutExtension>
-											<IncomeType>
+											<!-- <IncomeType>
 												<xsl:attribute name="tc">
 													<xsl:value-of select="instanceData/TXLife/A_LifeTime_Income_Single" />
 												</xsl:attribute>
@@ -282,24 +338,29 @@
 											</xsl:if>
 											<xsl:if test="instanceData/TXLife/A_PaymentPerc_Surviver = '3' ">
 												<SurvivorPaymntPct>50</SurvivorPaymntPct>
-											</xsl:if>
+											</xsl:if> -->
 											<SurvivorPaymntOption>
 												<xsl:attribute name="tc">
 													<xsl:value-of select="instanceData/TXLife/A_Payment_ReductionType" />
 												</xsl:attribute>
 												<xsl:value-of select="instanceData/TXLife/A_Payment_ReductionType_Desc" />
 											</SurvivorPaymntOption>
-											<xsl:if test="string-length(instanceData/TXLife/A_Opt_Features_Increase_Opt)>0 ">
-												<CashOutOption>
-													<xsl:attribute name="tc">
-														<xsl:value-of select="instanceData/TXLife/A_Opt_Features_Increase_Opt" />
-													</xsl:attribute>
-													Increasing Income Option
-												</CashOutOption>
+											<xsl:if test="./instanceData/TXLife/A_Opt_Features_Increase_Opt = '1'">
+												<IncreasingIncomeInd tc="1">True</IncreasingIncomeInd>
 											</xsl:if>
-											<IncomeOptionPct>
-												<xsl:value-of select="instanceData/TXLife/A_Opt_Features_Increase_Opt_Perc" />
-											</IncomeOptionPct>
+											<xsl:if test="./instanceData/TXLife/A_Opt_Features_Cashout_Opt = '1'">
+												<CashOutInd tc="1">True</CashOutInd>
+											</xsl:if>
+											
+											<!-- BHFD-4864 -->
+											<xsl:if test="./instanceData/TXLife/A_Opt_Features_Increase_Opt = '1'">
+												<IncreasingIncomePct>
+													<xsl:attribute name="tc">
+														<xsl:value-of select="instanceData/TXLife/A_Opt_Features_Increase_Opt_Perc" />
+													</xsl:attribute>
+													<xsl:value-of select="instanceData/TXLife/A_Opt_Features_Increase_Opt_Perc_Desc" />
+												</IncreasingIncomePct>
+											</xsl:if>
 											<IncomeStartAge>
 												<xsl:value-of select="instanceData/TXLife/A_IncomePayment_Start_Age" />
 											</IncomeStartAge>
@@ -320,7 +381,8 @@
 											<ParticipantRoleCode tc="27">Annuitant </ParticipantRoleCode>
 										</Participant>
 										
-										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+											(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 											<Participant id="Participant_1_2" PartyID="Party_JNT">
 												<ParticipantRoleCode tc="28">Joint Annuitant</ParticipantRoleCode>
 											</Participant>
@@ -349,7 +411,8 @@
 										<Participant id="Participant_2_1" PartyID="Party_PINS">
 											<ParticipantRoleCode tc="27">Annuitant</ParticipantRoleCode>
 										</Participant>
-										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+											(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 											<Participant id="Participant_2_2" PartyID="Party_JNT">
 												<ParticipantRoleCode tc="28">Joint Annuitant</ParticipantRoleCode>
 											</Participant>
@@ -377,7 +440,8 @@
 										<Participant id="Participant_3_1" PartyID="Party_PINS">
 											<ParticipantRoleCode tc="27">Annuitant</ParticipantRoleCode>
 										</Participant>
-										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+											(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 											<Participant id="Participant_3_2" PartyID="Party_JNT">
 												<ParticipantRoleCode tc="28">Joint Annuitant</ParticipantRoleCode>
 											</Participant>
@@ -399,12 +463,13 @@
 								<!-- Citation Required -->
 								<xsl:if test="./instanceData/TXLife/A_PGRCB = '1'">
 									<Rider id="Rider_4">
-										<RiderTypeCode tc="1">Principal Guarantee Rider</RiderTypeCode>
-										<RiderCode>RiderCode</RiderCode>
+										<RiderTypeCode tc="2147483647">Principal Guarantee Rider</RiderTypeCode>	<!-- BHFD-3904 - updated tc value -->
+										<RiderCode>PGR</RiderCode>
 										<Participant id="Participant_4_1" PartyID="Party_PINS">
 											<ParticipantRoleCode tc="27">Annuitant</ParticipantRoleCode>
 										</Participant>
-										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+											(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 											<Participant id="Participant_4_2" PartyID="Party_JNT">
 												<ParticipantRoleCode tc="28">Joint Annuitant</ParticipantRoleCode>
 											</Participant>
@@ -424,20 +489,18 @@
 								
 								<!-- Citation Required -->
 								<AnnuityUSA>
-									<DefLifeInsMethod>
+									<!-- <DefLifeInsMethod>
 										<xsl:attribute name="tc">
 											<xsl:value-of select="$DefLifeInsMethodtc" />
 										</xsl:attribute>
 										<xsl:value-of select="$DefLifeInsMethod" />
-									</DefLifeInsMethod>
+									</DefLifeInsMethod> -->
 									<!-- BHFD-530 -->
-									<xsl:if
-										test="./instanceData/TXLife/A_Internal1035 = '1'">
-										<Internal1035 tc="1">true</Internal1035>
+									<xsl:if test="./instanceData/TXLife/A_1035Exchange = '1'">
+										<Internal1035 tc="1">True</Internal1035>
 									</xsl:if>
-									<xsl:if
-										test="./instanceData/TXLife/A_Internal1035 = '0'">
-										<Internal1035 tc="0">false</Internal1035>
+									<xsl:if test="./instanceData/TXLife/A_1035Exchange != '1'">
+										<Internal1035 tc="0">False</Internal1035>
 									</xsl:if>
 								</AnnuityUSA>
 							</Annuity>
@@ -585,13 +648,12 @@
 									<ApplicationInfoExtension>
 										<xsl:if
 											test="./instanceData/TXLife/A_ExistingInsInd_AGT1 = '1'">
-											<ProducerOtherInsDisclosureInd
-												tc="1">True</ProducerOtherInsDisclosureInd>
+											<ProducerOtherInsDisclosureInd tc="1">True</ProducerOtherInsDisclosureInd>
 										</xsl:if>
+										<!-- BHFD-6431 -->
 										<xsl:if
-											test="./instanceData/TXLife/A_ExistingInsInd_AGT1 = '0'">
-											<ProducerOtherInsDisclosureInd
-												tc="0">False</ProducerOtherInsDisclosureInd>
+											test="./instanceData/TXLife/A_ExistingInsInd_AGT1 != '1'">
+											<ProducerOtherInsDisclosureInd tc="0">False</ProducerOtherInsDisclosureInd>
 										</xsl:if>
 										<xsl:if
 											test="string-length(./instanceData/TXLife/A_WorkItemID) >  0">
@@ -612,19 +674,21 @@
 												</xsl:when>
 											</xsl:choose>
 										</xsl:if>
-										<xsl:if
-											test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
-											<IllustrationID>
-												<xsl:value-of
-													select="instanceData/TXLife/A_IllustrationIDNum" />
-											</IllustrationID>
-										</xsl:if>
+										
 										
 										<xsl:if test="string-length(instanceData/TXLife/A_ClientAccNo)>0">
 											<CustomerID>
 												<xsl:value-of select="instanceData/TXLife/A_ClientAccNo" />
 											</CustomerID>
 										</xsl:if>
+										<!-- BHFD-3726 -->
+										<!-- <xsl:if
+											test="string-length(instanceData/TXLife/A_IllustrationIDNum)>0">
+											<IllustrationID>
+												<xsl:value-of
+													select="instanceData/TXLife/A_IllustrationIDNum" />
+											</IllustrationID>
+										</xsl:if> -->
 										
 										<xsl:if
 											test="string-length(instanceData/TXLife/A_Illustration_Dt)>0">
@@ -683,126 +747,169 @@
 										<AuthElectDocDeliveryInd tc="1">True</AuthElectDocDeliveryInd>
 									</xsl:if>
 									<xsl:if test="./instanceData/TXLife/A_EDElected != '1'">
-										<AuthElectDocDeliveryInd tc="0">False
-										</AuthElectDocDeliveryInd>
+										<AuthElectDocDeliveryInd tc="0">False</AuthElectDocDeliveryInd>
 									</xsl:if>
 								</PolicyExtension>
 							</OLifEExtension>
 						</Policy>
-						<Investment>
-							<xsl:for-each select="instanceData/TXLife/*">
-								<xsl:if test="starts-with(name(),'A_AllocPercent_')">
-									<xsl:if test="string-length(.) > 0">
-										<xsl:variable name="pos"
-											select="substring(name(),16)" />
-										<xsl:variable name="posValue"
-											select='format-number($pos, "0")' />
-										<xsl:if
-											test="../*[name()=concat('A_AllocPercent_',$pos)]!='0'">
-											<SubAccount>
-												<xsl:attribute name="id">
-													<xsl:value-of
-													select="concat('SubAccount_',$pos)" />
-												</xsl:attribute>
-												<ProductCode>
-													<xsl:value-of select="$pos" />
-												</ProductCode>
-												<AllocPercent>
-													<xsl:value-of
-														select="../*[name()=concat('A_AllocPercent_',$pos)]" />
-												</AllocPercent>
-											</SubAccount>
-										</xsl:if>
-									</xsl:if>
-								</xsl:if>
-							</xsl:for-each>
-							<xsl:for-each select="instanceData/TXLife/*">
-								<xsl:if test="starts-with(name(),'A_AllocPercentDCA_')">
-									<xsl:if test="string-length(.) > 0">
-										<xsl:variable name="pos"
-											select="substring(name(),19)" />
-										<xsl:variable name="posValue"
-											select='format-number($pos, "0")' />
-										<xsl:if
-											test="../*[name()=concat('A_AllocPercentDCA_',$pos)]!='0'">
-											<SubAccount>
-												<xsl:attribute name="id">
+						
+						<!-- BHFD-3590 - for GIB plan -->
+						<xsl:if test="instanceData/TXLife/A_PRODUCTCODE = '301' ">
+							<Investment>
+								<SubAccount id="SubAccount_799">
+									<ProductCode>799</ProductCode>
+									<AllocPercent>100</AllocPercent>
+								</SubAccount>
+							</Investment>
+							<Arrangement id="Arrangment_1">
+								<ArrType tc="37">Premium Allocation</ArrType>
+								<ArrDestination id="ArrDestination_799" SubAcctID="SubAccount_799">
+									<TransferAmtType tc="3">Percent</TransferAmtType>
+									<TransferPct>100</TransferPct>
+								</ArrDestination>
+							</Arrangement>							
+						</xsl:if>
+						
+						<xsl:if test="instanceData/TXLife/A_PRODUCTCODE != '301' ">
+							<Investment>
+								<xsl:for-each select="instanceData/TXLife/*">
+									<xsl:if test="starts-with(name(),'A_AllocPercent_')">
+										<xsl:if test="string-length(.) > 0">
+											<xsl:variable name="pos"
+												select="substring(name(),16)" />
+											<xsl:variable name="posValue"
+												select='format-number($pos, "0")' />
+											<xsl:if
+												test="../*[name()=concat('A_AllocPercent_',$pos)]!='0'">
+												<SubAccount>
+													<xsl:attribute name="id">
 														<xsl:value-of
-													select="concat('SubAccountDCA_',$pos)" />												
+														select="concat('SubAccount_',$pos)" />
 													</xsl:attribute>
-												<ProductCode>
-													<xsl:value-of select="$pos" />
-												</ProductCode>
-												<AllocPercent>
-													<xsl:value-of
-														select="../*[name()=concat('A_AllocPercentDCA_',$pos)]" />
-												</AllocPercent>
-											</SubAccount>
+													<ProductCode>
+														<xsl:value-of select="$pos" />
+													</ProductCode>
+													<AllocPercent>
+														<xsl:value-of
+															select="../*[name()=concat('A_AllocPercent_',$pos)]" />
+													</AllocPercent>
+												</SubAccount>
+											</xsl:if>
 										</xsl:if>
 									</xsl:if>
-								</xsl:if>
-							</xsl:for-each>
-							
-							<!--if Fixed account is not selected in Allocation screen for DCA, then manually creating the sub-account id -->
-							<xsl:if test="(not(string-length(./instanceData/TXLife/A_AllocPercent_137)>0) or ./instanceData/TXLife/A_AllocPercent_137 = '0') and ./instanceData/TXLife/A_DCAEDCA_Type = '2' and ./instanceData/TXLife/A_DCA_From_Fund != '900'">
-								<SubAccount>
-									<xsl:attribute name="id">SubAccount_137</xsl:attribute>
-									<ProductCode>137</ProductCode>
-								</SubAccount>
-							</xsl:if>
-							
-							<xsl:if test="(not(string-length(./instanceData/TXLife/A_AllocPercent_900)>0) or ./instanceData/TXLife/A_AllocPercent_900 = '0') and ./instanceData/TXLife/A_DCAEDCA_Type = '2' and ./instanceData/TXLife/A_DCA_From_Fund = '900'">
-								<SubAccount>
-									<xsl:attribute name="id">SubAccount_900</xsl:attribute>
-									<ProductCode>900</ProductCode>
-								</SubAccount>
-							</xsl:if>
-							
-							<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '24' and (not(string-length(./instanceData/TXLife/A_AllocPercent_901)>0) or ./instanceData/TXLife/A_AllocPercent_901 = '0') and 
-										(not(string-length(./instanceData/TXLife/A_AllocPercent_902)>0) or ./instanceData/TXLife/A_AllocPercent_902 = '0') and 
-										(not(string-length(./instanceData/TXLife/A_AllocPercent_903)>0) or ./instanceData/TXLife/A_AllocPercent_903 = '0')">								
-								<SubAccount>
-									<xsl:attribute name="id">SubAccount_901</xsl:attribute>
-									<ProductCode>901</ProductCode>
-								</SubAccount>
-							</xsl:if>
-							
-							<OLifEExtension VendorCode="05" ExtensionCode="Arrangement 2.8.90">								
-								<InvestmentExtension>							
-									<FundOptions>
-										<xsl:attribute name="tc">
-											<xsl:value-of select="./instanceData/TXLife/A_FundGrpOption" />												
-										</xsl:attribute>
-										<xsl:value-of select="./instanceData/TXLife/A_FundGrpOption_Desc" />
-									</FundOptions>			
-								</InvestmentExtension>
-							</OLifEExtension>
-						</Investment>
-						<Arrangement id="Arrangment_1">
-							<ArrType tc="37">Premium Allocation</ArrType>
-							<xsl:for-each select="instanceData/TXLife/*">
-								<xsl:if test="starts-with(name(),'A_AllocPercent_')">
-									<xsl:if test="string-length(.) > 0">
-										<xsl:variable name="pos" select="substring(name(),16)" />
-										<xsl:variable name="posValue" select='format-number($pos, "0")' />
-										<xsl:if test="../*[name()=concat('A_AllocPercent_',$pos)]!='0'">
-											<ArrDestination>
-												<xsl:attribute name="id">
-													<xsl:value-of select="concat('ArrDestination_',$pos)" />
-												</xsl:attribute>
-												<xsl:attribute name="SubAcctID">
-													<xsl:value-of select="concat('SubAccount_',$pos)" />
-												</xsl:attribute>
-												<TransferAmtType tc="3">Percent</TransferAmtType>
-												<TransferPct>
-													<xsl:value-of select="../*[name()=concat('A_AllocPercent_',$pos)]" />
-												</TransferPct>
-											</ArrDestination>
+								</xsl:for-each>
+								<xsl:for-each select="instanceData/TXLife/*">
+									<xsl:if test="starts-with(name(),'A_AllocPercentDCA_')">
+										<xsl:if test="string-length(.) > 0">
+											<xsl:variable name="pos"
+												select="substring(name(),19)" />
+											<xsl:variable name="posValue"
+												select='format-number($pos, "0")' />
+											<xsl:if
+												test="../*[name()=concat('A_AllocPercentDCA_',$pos)]!='0'">
+												<SubAccount>
+													<xsl:attribute name="id">
+															<xsl:value-of
+														select="concat('SubAccountDCA_',$pos)" />												
+														</xsl:attribute>
+													<ProductCode>
+														<xsl:value-of select="$pos" />
+													</ProductCode>
+													<AllocPercent>
+														<xsl:value-of
+															select="../*[name()=concat('A_AllocPercentDCA_',$pos)]" />
+													</AllocPercent>
+												</SubAccount>
+											</xsl:if>
 										</xsl:if>
 									</xsl:if>
+								</xsl:for-each>
+								
+								<!--if Fixed account is not selected in Allocation screen for DCA, then manually creating the sub-account id -->
+								<!-- For BlackRock Fund -->
+								<xsl:if test="(not(string-length(./instanceData/TXLife/A_AllocPercent_137)>0) or ./instanceData/TXLife/A_AllocPercent_137 = '0') and ./instanceData/TXLife/A_DCAEDCA_Type = '2' and ./instanceData/TXLife/A_DCA_From_Fund = '137'">
+									<SubAccount>
+										<xsl:attribute name="id">SubAccount_137</xsl:attribute>
+										<ProductCode>137</ProductCode>
+									</SubAccount>
 								</xsl:if>
-							</xsl:for-each>
-						</Arrangement>
+								
+								<!-- For Fixed Fund -->
+								<xsl:if test="(not(string-length(./instanceData/TXLife/A_AllocPercent_900)>0) or ./instanceData/TXLife/A_AllocPercent_900 = '0') and ./instanceData/TXLife/A_DCAEDCA_Type = '2' and ./instanceData/TXLife/A_DCA_From_Fund = '900'">
+									<SubAccount>
+										<xsl:attribute name="id">SubAccount_900</xsl:attribute>
+										<ProductCode>900</ProductCode>
+									</SubAccount>
+								</xsl:if>
+								
+								<!-- BHFD-3599 - If the source From Fund is not provided create a dummy SubAccount -->
+								<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '2' and (./instanceData/TXLife/A_DCA_From_Fund = '-1' or ./instanceData/TXLife/A_DCA_From_Fund = '')">
+									<SubAccount>
+										<xsl:attribute name="id">SubAccount_0</xsl:attribute>
+										<ProductCode>0</ProductCode>
+									</SubAccount>
+								</xsl:if>
+								
+								<!-- BHFD-4138 -->
+								<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '24' and instanceData/TXLife/A_EDCA_Transfer_Period != '-1'">
+								<xsl:variable name="EDCAFund" select="concat('A_AllocPercent_',instanceData/TXLife/A_EDCA_From_Fund)" />
+									<xsl:if test="(not(string-length(./instanceData/TXLife/*[name()=$EDCAFund])>0))">
+										<SubAccount>
+											<xsl:attribute name="id">
+												<xsl:value-of select="concat('SubAccount_',instanceData/TXLife/A_EDCA_From_Fund)" />
+											</xsl:attribute>
+											<ProductCode>
+												<xsl:value-of select="instanceData/TXLife/A_EDCA_From_Fund" />
+											</ProductCode>
+										</SubAccount>
+									</xsl:if>
+								</xsl:if>
+								
+								<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '24' and (not(string-length(instanceData/TXLife/A_EDCA_From_Fund)>0))">								
+									<SubAccount>
+										<xsl:attribute name="id">SubAccount_0</xsl:attribute>
+										<ProductCode>0</ProductCode>
+									</SubAccount>
+								</xsl:if>
+								 <!-- BHFD-3599 - End -->
+								
+								<OLifEExtension VendorCode="05" ExtensionCode="Arrangement 2.8.90">								
+									<InvestmentExtension>							
+										<FundOptions>
+											<xsl:attribute name="tc">
+												<xsl:value-of select="./instanceData/TXLife/A_FundGrpOption" />												
+											</xsl:attribute>
+											<xsl:value-of select="./instanceData/TXLife/A_FundGrpOption_Desc" />
+										</FundOptions>			
+									</InvestmentExtension>
+								</OLifEExtension>
+							</Investment>
+							<Arrangement id="Arrangment_1">
+								<ArrType tc="37">Premium Allocation</ArrType>
+								<xsl:for-each select="instanceData/TXLife/*">
+									<xsl:if test="starts-with(name(),'A_AllocPercent_')">
+										<xsl:if test="string-length(.) > 0">
+											<xsl:variable name="pos" select="substring(name(),16)" />
+											<xsl:variable name="posValue" select='format-number($pos, "0")' />
+											<xsl:if test="../*[name()=concat('A_AllocPercent_',$pos)]!='0'">
+												<ArrDestination>
+													<xsl:attribute name="id">
+														<xsl:value-of select="concat('ArrDestination_',$pos)" />
+													</xsl:attribute>
+													<xsl:attribute name="SubAcctID">
+														<xsl:value-of select="concat('SubAccount_',$pos)" />
+													</xsl:attribute>
+													<TransferAmtType tc="3">Percent</TransferAmtType>
+													<TransferPct>
+														<xsl:value-of select="../*[name()=concat('A_AllocPercent_',$pos)]" />
+													</TransferPct>
+												</ArrDestination>
+											</xsl:if>
+										</xsl:if>
+									</xsl:if>
+								</xsl:for-each>
+							</Arrangement>
+						</xsl:if>
 						
 						<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type != '1' and string-length(instanceData/TXLife/A_DCAEDCA_Type)>0">
 							<Arrangement id="Arrangment_DCA_EDCA">
@@ -817,25 +924,17 @@
 										<xsl:if test="./instanceData/TXLife/A_DCA_From_Fund != '-1' and string-length(instanceData/TXLife/A_DCA_From_Fund) > 0 and ./instanceData/TXLife/A_DCAEDCA_Type = '2'">
 											<xsl:value-of select="concat('SubAccount_',instanceData/TXLife/A_DCA_From_Fund)" />
 										</xsl:if>
-										<xsl:if test="(./instanceData/TXLife/A_DCA_From_Fund = '-1' or string-length(instanceData/TXLife/A_DCA_From_Fund) = 0) and ./instanceData/TXLife/A_DCAEDCA_Type = '2'">
-											<xsl:value-of select="concat('SubAccount_','137')" />
+										<xsl:if test="((./instanceData/TXLife/A_DCA_From_Fund = '-1' or string-length(instanceData/TXLife/A_DCA_From_Fund) = 0) and (./instanceData/TXLife/A_DCAEDCA_Type = '2' ) )">
+											<xsl:value-of select="concat('SubAccount_','0')" />	<!-- BHFD-3599 - changed from 137 to 0-->
 										</xsl:if>
 										<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '24'">
-											<xsl:choose>
-												<xsl:when test="(string-length(./instanceData/TXLife/A_AllocPercent_901)>0) and ./instanceData/TXLife/A_AllocPercent_901 != '0'">
-													<xsl:value-of select="concat('SubAccount_','901')" />
-												</xsl:when>
-												<xsl:when test="(string-length(./instanceData/TXLife/A_AllocPercent_902)>0) and ./instanceData/TXLife/A_AllocPercent_902 != '0'">
-													<xsl:value-of select="concat('SubAccount_','902')" />
-												</xsl:when>
-												<xsl:when test="(string-length(./instanceData/TXLife/A_AllocPercent_903)>0) and ./instanceData/TXLife/A_AllocPercent_903 != '0'">
-													<xsl:value-of select="concat('SubAccount_','903')" />
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:value-of select="concat('SubAccount_','901')" />
-												</xsl:otherwise>
-											</xsl:choose>
-											
+											<!-- BHFD-4138 -->
+											<xsl:if test="./instanceData/TXLife/A_EDCA_Transfer_Period != '-1' and string-length(instanceData/TXLife/A_EDCA_From_Fund) > 0">
+												<xsl:value-of select="concat('SubAccount_',instanceData/TXLife/A_EDCA_From_Fund)" />
+											</xsl:if>
+											<xsl:if test="string-length(instanceData/TXLife/A_EDCA_From_Fund) = 0">
+												<xsl:value-of select="concat('SubAccount_','0')" />
+											</xsl:if>
 										</xsl:if>
 									</xsl:attribute>
 									<TransferAmtType tc="2">Amounts</TransferAmtType>
@@ -877,9 +976,16 @@
 								</xsl:for-each>
 								<OLifEExtension VendorCode="05" ExtensionCode="Arrangement 2.8.90">
 									<ArrangementExtension>
+										<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '2'">
 										<TransferNumber>
 											<xsl:value-of select="instanceData/TXLife/A_DCA_Period_Other" />
 										</TransferNumber>
+										</xsl:if>
+										<xsl:if test="./instanceData/TXLife/A_DCAEDCA_Type = '24' and instanceData/TXLife/A_EDCA_Transfer_Period != '-1'">
+										<TransferNumber>
+											<xsl:value-of select="instanceData/TXLife/A_EDCA_Transfer_Period" />
+										</TransferNumber>
+										</xsl:if>
 										<xsl:if test="./instanceData/TXLife/A_DCA_Period_Type= '2'">
 											<TransferNumberTC tc="1009900007">Until Depleted</TransferNumberTC>
 										</xsl:if>
@@ -1016,23 +1122,31 @@
 					</Holding>
 					<!-- NB Holding END -->
 					<!--Deseased Owner Holding -->
-					<xsl:if
-						test="./instanceData/TXLife/A_ContractAppliedFor='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005'">  <!-- BHFD-3371 -->
-						<xsl:if
-							test="string-length(./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc)>0 and
-											./instanceData/TXLife/A_CurrentCompany_DecedentIRA !='-1'">
+					<xsl:if test="./instanceData/TXLife/A_ContractAppliedFor='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005'">  <!-- BHFD-3371 -->
+						
 							<Holding id="Holding_DeceasedOwner">
 								<HoldingTypeCode tc="2">Policy</HoldingTypeCode>
 								<HoldingStatus tc="1">Active</HoldingStatus>
 								<Policy>
-									<xsl:if
-										test="string-length(./instanceData/TXLife/A_PolNum_DecedentIRA)>0">
+									<xsl:if test="string-length(./instanceData/TXLife/A_PolNum_DecedentIRA)>0">
 										<PolNumber>
-											<xsl:value-of
-												select="./instanceData/TXLife/A_PolNum_DecedentIRA" />
+											<xsl:value-of select="./instanceData/TXLife/A_PolNum_DecedentIRA" />
 										</PolNumber>
 									</xsl:if>
 										<ReplacementType tc="1000990011">Inherited Annuity</ReplacementType>
+										
+										<!-- BHFD-6032 -->
+										<xsl:if test="string-length(instanceData/TXLife/A_IssueDate_DecedentIRA)>0">
+											<IssueDate>
+												<xsl:call-template name="FormatDate">
+													<xsl:with-param name="Separator">/</xsl:with-param>
+													<xsl:with-param name="DateString">
+														<xsl:value-of select="instanceData/TXLife/A_IssueDate_DecedentIRA" />
+													</xsl:with-param>
+												</xsl:call-template>
+											</IssueDate>
+										</xsl:if>
+										
 										<OLifEExtension ExtensionCode="Policy 2.8.90" VendorCode="05">
 											<PolicyExtension>
 											<xsl:choose>
@@ -1055,9 +1169,6 @@
 									</OLifEExtension>
 								</Policy>
 							</Holding>
-						</xsl:if>
-						<xsl:if
-							test="string-length(./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc)>0">
 							<Party id="Party_Decedent_CAR">
 								<PartyTypeCode tc="2">Organization</PartyTypeCode>
 								<FullName>
@@ -1065,16 +1176,13 @@
 										select="./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc" />
 								</FullName>
 								<Organization>
+									<OrgForm tc="23">Corporation</OrgForm>
 									<DBA>
-										<xsl:value-of
-											select="./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc" />
+										<xsl:value-of select="./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc" />
 									</DBA>
 								</Organization>
 							</Party>
-						</xsl:if>
-						<xsl:if
-							test="string-length(./instanceData/TXLife/A_FirstName_DecedentIRA)>0 
-										or string-length(./instanceData/TXLife/A_LastName_DecedentIRA)>0 ">
+						<xsl:if test="string-length(./instanceData/TXLife/A_FirstName_DecedentIRA)>0 or string-length(./instanceData/TXLife/A_LastName_DecedentIRA)>0 ">
 							<Party id="Party_DeceasedOwner">
 								<PartyTypeCode tc="1">Person</PartyTypeCode>
 								<xsl:if
@@ -1102,14 +1210,14 @@
 										test="./instanceData/TXLife/A_Prefix_DecedentIRA != '-1'">
 										<Prefix>
 											<xsl:value-of
-												select="./instanceData/TXLife/A_Prefix_DecedentIRA_Desc" />
+												select="./instanceData/TXLife/A_Prefix_DecedentIRA" />
 										</Prefix>
 									</xsl:if>
 									<xsl:if
 										test="./instanceData/TXLife/A_Suffix_DecedentIRA != '-1'">
 										<Suffix>
 											<xsl:value-of
-												select="./instanceData/TXLife/A_Suffix_DecedentIRA_Desc" />
+												select="./instanceData/TXLife/A_Suffix_DecedentIRA" />
 										</Suffix>
 									</xsl:if>
 									<xsl:if
@@ -1143,22 +1251,20 @@
 								<xsl:variable name="posValue"
 									select='format-number($pos, "0")' />
 								<xsl:if test="$pos != '' and $posValue &lt;= $repCount">
-									<xsl:if
+									<!-- <xsl:if
 										test="string-length(../*[name()=concat('A_ReplacementCompany_REP',$pos)])>0 and
-											../*[name()=concat('A_ReplacementCompany_REP',$pos)]!='-1'">
+											../*[name()=concat('A_ReplacementCompany_REP',$pos)]!='-1'"> -->
 										<Holding>
 											<xsl:attribute name="id">
-													<xsl:value-of
-												select="concat('Holding_REP_',$pos)" />
-												</xsl:attribute>
+													<xsl:value-of select="concat('Holding_REP_',$pos)" />
+											</xsl:attribute>
 											<HoldingTypeCode tc="2">Policy</HoldingTypeCode>
 											<HoldingStatus tc="1">Active</HoldingStatus>
 											<Policy>
 												<xsl:if
 													test="string-length(../*[name()=concat('A_PolNum_REP',$pos)])>0">
 													<PolNumber>
-														<xsl:value-of
-															select="../*[name()=concat('A_PolNum_REP',$pos)]" />
+														<xsl:value-of select="../*[name()=concat('A_PolNum_REP',$pos)]" />
 													</PolNumber>
 												</xsl:if>
 												<!-- BHFD-1171 -->
@@ -1166,8 +1272,7 @@
 													<ProductCode> <xsl:value-of select="../*[name()=concat('A_PlanType_REP',$pos, 
 													'_Desc')]" /> </ProductCode> </xsl:if> -->
 												<xsl:choose>
-													<xsl:when
-														test="contains(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')] ,'Brighthouse') or
+													<xsl:when test="contains(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')] ,'Brighthouse') or
 																      contains(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')] ,'MetLife') or 
 																      contains(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')] ,'New England Financial') or
 																      contains(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')] ,'Security First Life Ins Co')">
@@ -1223,27 +1328,25 @@
 											</OLifEExtension>
 											</Policy>
 										</Holding>
-									</xsl:if>
-									<xsl:if
-										test="string-length(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')])>0">
+									<!-- </xsl:if> -->
+									<!-- <xsl:if
+										test="string-length(../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')])>0"> -->
 										<Party>
 											<xsl:attribute name="id">
-												<xsl:value-of
-												select="concat('Party_REP',$pos,'_CAR')" />
+												<xsl:value-of select="concat('Party_REP',$pos,'_CAR')" />
 											</xsl:attribute>
 											<PartyTypeCode tc="2">Organization</PartyTypeCode>
 											<FullName>
-												<xsl:value-of
-													select="../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')]" />
+												<xsl:value-of select="../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')]" />
 											</FullName>
 											<Organization>
+												<OrgForm tc="23">Corporation</OrgForm>	<!-- BHFD-3986 -->
 												<DBA>
-													<xsl:value-of
-														select="../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')]" />
+													<xsl:value-of select="../*[name()=concat('A_ReplacementCompany_REP',$pos,'_Desc')]" />
 												</DBA>
 											</Organization>
 										</Party>
-									</xsl:if>
+									<!-- </xsl:if> -->
 								</xsl:if>
 							</xsl:if>
 						</xsl:for-each>
@@ -1408,16 +1511,26 @@
 									</DialNumber>
 								</Phone>
 							</xsl:if>
-							<xsl:if
-								test="string-length(./instanceData/TXLife/A_EmailAddress_PINS)	>  0">
+							<xsl:if test="string-length(./instanceData/TXLife/A_EmailAddress_PINS)	>  0">
 								<EMailAddress id="EMailAddress_PINS">
 									<EMailType tc="2">Personal</EMailType>
+									<AddrLine>
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_PINS" />
+									</AddrLine>
+								</EMailAddress>
+							</xsl:if>
+							
+							<!-- BHFD-3982 -->
+							<xsl:if test="./instanceData/TXLife/A_EDElected = '1' and string-length(./instanceData/TXLife/A_EmailAddress_PINS)	>  0">
+								<EMailAddress id="EMailAddress2_PINS">
+									<EMailType tc="1000500001">eDelivery</EMailType>
 									<AddrLine>
 										<xsl:value-of
 											select="instanceData/TXLife/A_EmailAddress_PINS" />
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
+							
 							<Risk>
 								<!-- BHFD-3408 -->
 								<xsl:if test="./instanceData/TXLife/A_InforceNAppliedfor_PINS = '1'">
@@ -1593,11 +1706,21 @@
 								<EMailAddress id="EMailAddress_JNT">
 									<EMailType tc="2">Personal</EMailType>
 									<AddrLine>
-										<xsl:value-of
-											select="instanceData/TXLife/A_EmailAddress_JNT" />
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_JNT" />
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
+							
+							<!-- BHFD-3982 -->
+							<xsl:if test="./instanceData/TXLife/A_EDElected = '1' and string-length(./instanceData/TXLife/A_EmailAddress_JNT)	>  0">
+								<EMailAddress id="EMailAddress2_JNT">
+									<EMailType tc="1000500001">eDelivery</EMailType>
+									<AddrLine>
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_JNT" />
+									</AddrLine>
+								</EMailAddress>
+							</xsl:if>
+							
 						</Party>
 					</xsl:if>
 					<!-- Joint Annuitant Party END -->
@@ -1761,8 +1884,17 @@
 								<EMailAddress id="EMailAddress_OWN1">
 									<EMailType tc="2">Personal</EMailType>
 									<AddrLine>
-										<xsl:value-of
-											select="./instanceData/TXLife/A_EmailAddress_OWN" />
+										<xsl:value-of select="./instanceData/TXLife/A_EmailAddress_OWN" />
+									</AddrLine>
+								</EMailAddress>
+							</xsl:if>
+							
+							<!-- BHFD-3982 -->
+							<xsl:if test="./instanceData/TXLife/A_EDElected = '1' and string-length(./instanceData/TXLife/A_EmailAddress_OWN) >  0">
+								<EMailAddress id="EMailAddress2_OWN1">
+									<EMailType tc="1000500001">eDelivery</EMailType>
+									<AddrLine>
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_OWN" />
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
@@ -1914,6 +2046,16 @@
 									<AddrLine>
 										<xsl:value-of
 											select="./instanceData/TXLife/A_EmailAddress_OWN" />
+									</AddrLine>
+								</EMailAddress>
+							</xsl:if>
+							
+							<!-- BHFD-3982 -->
+							<xsl:if test="./instanceData/TXLife/A_EDElected = '1' and string-length(./instanceData/TXLife/A_EmailAddress_OWN) >  0">
+								<EMailAddress id="EMailAddress2_OWN1">
+									<EMailType tc="1000500001">eDelivery</EMailType>
+									<AddrLine>
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_OWN" />
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
@@ -2082,6 +2224,16 @@
 									<AddrLine>
 										<xsl:value-of
 											select="./instanceData/TXLife/A_EmailAddress_JointOwn" />
+									</AddrLine>
+								</EMailAddress>
+							</xsl:if>
+							
+							<!-- BHFD-3982 -->
+							<xsl:if test="./instanceData/TXLife/A_EDElected = '1' and string-length(./instanceData/TXLife/A_EmailAddress_JointOwn) >  0">
+								<EMailAddress id="EMailAddress2_OWN2">
+									<EMailType tc="1000500001">eDelivery</EMailType>
+									<AddrLine>
+										<xsl:value-of select="instanceData/TXLife/A_EmailAddress_JointOwn" />
 									</AddrLine>
 								</EMailAddress>
 							</xsl:if>
@@ -2274,17 +2426,14 @@
 												 string-length(../*[name()=concat('A_ZipCode_BEN',$pos)]) > 0 "> <!-- BHFD-3375 : updated condition -->
 												<Address>
 													<xsl:attribute name="id">
-													<xsl:value-of
-														select="concat('Address_BEN',$pos)" />
-												</xsl:attribute>
+														<xsl:value-of select="concat('Address_BEN',$pos)" />
+													</xsl:attribute>
 													<xsl:if
 														test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '1' ">
 														<AddressTypeCode tc="1">Home</AddressTypeCode>
 													</xsl:if>
-													<xsl:if
-														test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '2' ">
-														<AddressTypeCode tc="2">Business
-														</AddressTypeCode>
+													<xsl:if test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '2' ">
+														<AddressTypeCode tc="2">Business</AddressTypeCode>
 													</xsl:if>
 													<AttentionLine>
 														<xsl:value-of select="../*[name()=concat('A_AddressLine1_BEN',$pos)]" />
@@ -2349,28 +2498,22 @@
 													</xsl:if>
 												</Address>
 											</xsl:if>
-											<xsl:if
-												test="string-length(../*[name()=concat('A_PhoneNum_BEN',$pos)])>0">
+											<xsl:if test="string-length(../*[name()=concat('A_PhoneNum_BEN',$pos)])>0">
 												<Phone>
 													<xsl:attribute name="id">
-															<xsl:value-of
-														select="concat('Phone_BEN_',$pos)" />
-														</xsl:attribute>
-													<xsl:if
-														test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '1' ">
+														<xsl:value-of select="concat('Phone_BEN_',$pos)" />
+													</xsl:attribute>
+													<xsl:if test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '1' ">
 														<PhoneTypeCode tc="1">Home</PhoneTypeCode>
 													</xsl:if>
-													<xsl:if
-														test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '2' ">
+													<xsl:if test="(../*[name()=concat('A_BeneficiaryType_BEN',$pos)]) = '2' ">
 														<PhoneTypeCode tc="2">Business</PhoneTypeCode>
 													</xsl:if>
 													<AreaCode>
-														<xsl:value-of
-															select="substring(../*[name()=concat('A_PhoneNum_BEN',$pos)],1,3)" />
+														<xsl:value-of select="substring(../*[name()=concat('A_PhoneNum_BEN',$pos)],1,3)" />
 													</AreaCode>
 													<DialNumber>
-														<xsl:value-of
-															select="substring(../*[name()=concat('A_PhoneNum_BEN',$pos)],4)" />
+														<xsl:value-of select="substring(../*[name()=concat('A_PhoneNum_BEN',$pos)],4)" />
 													</DialNumber>
 												</Phone>
 											</xsl:if>
@@ -2496,9 +2639,8 @@
 												 string-length(../*[name()=concat('A_ZipCode_CBN',$pos)]) > 0 ">  <!-- BHFD-3375 : updated condition -->
 													<Address>
 														<xsl:attribute name="id">
-														<xsl:value-of
-															select="concat('Address_CBN',$pos)" />
-													</xsl:attribute>
+															<xsl:value-of select="concat('Address_CBN',$pos)" />
+														</xsl:attribute>
 														<xsl:if test="(../*[name()=concat('A_BeneficiaryType_CBN',$pos)]) = '1' ">
 															<AddressTypeCode tc="1">Home</AddressTypeCode>
 														</xsl:if>
@@ -2533,11 +2675,9 @@
 														<xsl:if test="(../*[name()=concat('A_State_CBN',$pos)]) != '-1'">
 															<AddressStateTC>
 																<xsl:attribute name="tc">
-																<xsl:value-of
-																	select="../*[name()=concat('A_State_CBN',$pos)]" />
-															</xsl:attribute>
-																<xsl:value-of
-																	select="../*[name()=concat('A_State_CBN',$pos, '_Desc')]" />
+																	<xsl:value-of select="../*[name()=concat('A_State_CBN',$pos)]" />
+																</xsl:attribute>
+																<xsl:value-of select="../*[name()=concat('A_State_CBN',$pos, '_Desc')]" />
 															</AddressStateTC>
 														</xsl:if>
 														<xsl:choose>
@@ -2863,22 +3003,16 @@
 					<!-- Producer AGT Party END -->
 					<!-- Relation object to associate the carrier party and the holding 
 						for the Deseased Owner policy. -->
-					<xsl:if
-						test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005') and
-											string-length(./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc) > 0">  <!-- BHFD-3371 -->
-						<Relation id="Relation_Decedent_Holding"
-							OriginatingObjectID="Holding_DeceasedOwner"
-							RelatedObjectID="Party_Decedent_CAR">
-							<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
-							<RelatedObjectType tc="6">Party</RelatedObjectType>
+					<xsl:if test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005')">  <!-- BHFD-3371 -->
+						<Relation id="Relation_Decedent_Holding" OriginatingObjectID="Party_Decedent_CAR" RelatedObjectID="Holding_DeceasedOwner">		<!-- BHFD-5938 -->
+							<OriginatingObjectType tc="6">Party</OriginatingObjectType>		<!-- BHFD-5938 -->
+							<RelatedObjectType tc="4">Holding</RelatedObjectType>		<!-- BHFD-5938 -->
 							<RelationRoleCode tc="88">Holding Company</RelationRoleCode>
 						</Relation>
 					</xsl:if>
 					<!-- Relation object to identify Deseased policy Holding is replaced 
 						by Holding_1 -->
-					<xsl:if
-						test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005') and
-											string-length(./instanceData/TXLife/A_CurrentCompany_DecedentIRA_Desc) > 0">	<!-- BHFD-3371 -->
+					<xsl:if test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005')">	<!-- BHFD-3371 -->
 						<Relation id="Relation_RPL_Decedent" OriginatingObjectID="Holding_1" RelatedObjectID="Holding_DeceasedOwner">
 							<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
 							<RelatedObjectType tc="4">Holding</RelatedObjectType>
@@ -2886,21 +3020,17 @@
 						</Relation>
 					</xsl:if>
 					<!-- Create a Party/Party relation between the Decedent and Annuitant -->
-					<xsl:if
-						test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005') and
-											(string-length(./instanceData/TXLife/A_FirstName_DecedentIRA) > 0 or
-											string-length(./instanceData/TXLife/A_LastName_DecedentIRA) > 0 ) ">	<!-- BHFD-3371 -->
-						<Relation id="Relation_Decedent" OriginatingObjectID="Holding_1" RelatedObjectID="Party_DeceasedOwner">
+					<xsl:if test="(./instanceData/TXLife/A_ContractAppliedFor ='1009900004' or ./instanceData/TXLife/A_ContractAppliedFor='1009900005') and 
+						(string-length(./instanceData/TXLife/A_FirstName_DecedentIRA) > 0 or string-length(./instanceData/TXLife/A_LastName_DecedentIRA) > 0)">	<!-- BHFD-3371 -->
+						<Relation id="Relation_Decedent" OriginatingObjectID="Holding_DeceasedOwner" RelatedObjectID="Party_DeceasedOwner">
 							<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
 							<RelatedObjectType tc="6">Party</RelatedObjectType>
-							<RelationRoleCode tc="1009900006">Deceased Original Owner</RelationRoleCode> <!-- BHFD-3534 -->
+							<RelationRoleCode tc="1009900006">Deceased Original Owner</RelationRoleCode>	<!-- BHFD-3534 updated tc value -->
 							<!-- Citation needed for actual tc value -->
-							<xsl:if
-								test="./instanceData/TXLife/A_IsSpousal_DecedentIRA = '1'">
+							<xsl:if test="./instanceData/TXLife/A_IsSpousal_DecedentIRA = '1'">
 								<RelationDescription tc="900">Spouse</RelationDescription>
 							</xsl:if>
-							<xsl:if
-								test="./instanceData/TXLife/A_IsSpousal_DecedentIRA = '2'">
+							<xsl:if test="./instanceData/TXLife/A_IsSpousal_DecedentIRA = '2'">
 								<RelationDescription tc="2147483647">Other</RelationDescription>
 							</xsl:if>
 						</Relation>
@@ -2908,28 +3038,29 @@
 					<!-- Carrier party and the holding for the existing relation -->
 					<xsl:for-each select="instanceData/TXLife/*">
 						<xsl:if test="starts-with(name(),'A_PolNum_REP')">
-							<xsl:if test="string-length(.) > 0">
 								<xsl:variable name="pos" select="substring(name(),13)" />
 								<xsl:variable name="repCount"
 									select='format-number(../*[name()="A_COUNT_TOTAL_REP"], "0")' />
 								<xsl:variable name="posValue" select='format-number($pos, "0")' />
 								<xsl:if test="$pos != '' and $posValue &lt;= $repCount">
-									<Relation>
-										<xsl:attribute name="RelatedObjectID">
-											<xsl:value-of select="concat('Holding_REP_',$pos)" />
-										</xsl:attribute>
-										<xsl:attribute name="OriginatingObjectID">
-											<xsl:value-of select="concat('Party_REP',$pos,'_CAR')" />
-										</xsl:attribute>
-										<xsl:attribute name="id">
-											<xsl:value-of select="concat('Relation_REP',$pos,'_1')" />
-										</xsl:attribute>
-										<OriginatingObjectType tc="6">Party</OriginatingObjectType>
-										<RelatedObjectType tc="4">Holding</RelatedObjectType>
-										<RelationRoleCode tc="88">Holding Company</RelationRoleCode>
-									</Relation>
+								
+									<xsl:if test="../A_ChangeExistingPolicyInd_PINS='1'">
+										<Relation>
+											<xsl:attribute name="RelatedObjectID">
+												<xsl:value-of select="concat('Holding_REP_',$pos)" />
+											</xsl:attribute>
+											<xsl:attribute name="OriginatingObjectID">
+												<xsl:value-of select="concat('Party_REP',$pos,'_CAR')" />
+											</xsl:attribute>
+											<xsl:attribute name="id">
+												<xsl:value-of select="concat('Relation_REP',$pos,'_1')" />
+											</xsl:attribute>
+											<OriginatingObjectType tc="6">Party</OriginatingObjectType>
+											<RelatedObjectType tc="4">Holding</RelatedObjectType>
+											<RelationRoleCode tc="88">Holding Company</RelationRoleCode>
+										</Relation>
+									</xsl:if>
 								</xsl:if>
-							</xsl:if>
 						</xsl:if>
 					</xsl:for-each>
 					<!-- Replacment relation holding/holding -->
@@ -2940,9 +3071,8 @@
 								select='format-number(../*[name()="A_COUNT_TOTAL_REP"], "0")' />
 							<xsl:variable name="posValue" select='format-number($pos, "0")' />
 							<xsl:if test="$pos != '' and $posValue &lt;= $repCount">
-								<xsl:if
-									test="../A_ChangeExistingPolicyInd_PINS='1' and string-length(../*[name()=concat('A_ReplacementCompany_REP',$pos)])>0 and
-											../*[name()=concat('A_ReplacementCompany_REP',$pos)]!='-1'">
+							
+								<xsl:if test="../A_ChangeExistingPolicyInd_PINS='1'">
 									<Relation OriginatingObjectID="Holding_1">
 										<xsl:attribute name="RelatedObjectID">
 											<xsl:value-of select="concat('Holding_REP_',$pos)" />
@@ -2981,10 +3111,8 @@
 						</xsl:if>
 					</Relation>
 					<!-- Joint Annuitant Relation -->
-					<xsl:if
-						test="./instanceData/TXLife/A_JointAnnInd = '1' and
-							(string-length(./instanceData/TXLife/A_FirstName_JNT) > 0 or 
-											string-length(./instanceData/TXLife/A_LastName_JNT) > 0 )">
+					<xsl:if test="./instanceData/TXLife/A_JointAnnInd = '1' and 
+						(string-length(./instanceData/TXLife/A_FirstName_JNT)>0 or string-length(./instanceData/TXLife/A_LastName_JNT)>0) ">
 						<Relation id="Relation_JNT"
 							OriginatingObjectID="Holding_1" RelatedObjectID="Party_JNT">
 							<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
@@ -3011,11 +3139,9 @@
 						</Relation>
 					</xsl:if>
 					<!-- Joint OWN Relation when Joint Annuitant = Joint OWN -->
-					<xsl:if
-						test="./instanceData/TXLife/A_JointOwnInd != '1' and ./instanceData/TXLife/A_JointAnnInd = '1'">
-						<xsl:if
-							test="string-length(./instanceData/TXLife/A_FirstName_JNT) > 0 or 
-											string-length(./instanceData/TXLife/A_LastName_JNT) > 0 ">
+					<xsl:if test="./instanceData/TXLife/A_JointOwnInd != '1' and ./instanceData/TXLife/A_JointAnnInd = '1'">
+						<xsl:if test="string-length(./instanceData/TXLife/A_FirstName_JNT) > 0 or 
+							string-length(./instanceData/TXLife/A_LastName_JNT) > 0 ">
 							<Relation id="Relation_OWN2"
 								OriginatingObjectID="Holding_1" RelatedObjectID="Party_JNT">
 								<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
@@ -3092,11 +3218,9 @@
 								<RelationRoleCode tc="146">Business Partner</RelationRoleCode>
 							</xsl:if>
 							<xsl:if
-								test="./instanceData/TXLife/A_OwnerType_OWN='1' or
-													./instanceData/TXLife/A_OwnerType_OWN='23' or 
-													./instanceData/TXLife/A_OwnerType_OWN='11' or 
-													 ./instanceData/TXLife/A_OwnerType_OWN='2147483647'  ">
-								<RelationRoleCode tc="1009900003">Company Officer</RelationRoleCode><!--Pending tc value for Custodian Owner -->
+								test="./instanceData/TXLife/A_OwnerType_OWN !='2' and
+													./instanceData/TXLife/A_OwnerType_OWN !='16' ">
+								<RelationRoleCode tc="150">Authorized Person</RelationRoleCode><!-- BHFD-3443 -->
 							</xsl:if>
 							<xsl:if test="./instanceData/TXLife/A_OwnerType_OWN ='16'">
 								<RelationRoleCode tc="69">Trustee</RelationRoleCode>
@@ -3125,27 +3249,25 @@
 													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '1'">
 													<xsl:attribute name="RelatedObjectID">Party_PINS</xsl:attribute>
 												</xsl:when>
-												<xsl:when
-													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '2'">
+												<xsl:when test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '2' and 
+													(string-length(../A_FirstName_JNT) > 0 or string-length(../A_LastName_JNT) > 0)">
 													<xsl:attribute name="RelatedObjectID">Party_JNT</xsl:attribute>
 												</xsl:when>
-												<xsl:when
-													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and ../A_OwnerType = '1'">
+												<xsl:when test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and 
+													(string-length(../A_FirstName_OWN) > 0 or string-length(../A_LastName_OWN) > 0)">
 													<xsl:attribute name="RelatedObjectID">Party_OWN</xsl:attribute>
 												</xsl:when>
-												<xsl:when
-													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and ../A_OwnerType = '2'">
+												<xsl:when test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '3' and 
+													(string-length(../A_EntityName_OWN) > 0)">
 													<xsl:attribute name="RelatedObjectID">Party_OWN_ENTITY</xsl:attribute>
 												</xsl:when>
-												<xsl:when
-													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '4'">
+												<xsl:when test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '4' and 
+													(string-length(../A_FirstName_JointOwn) > 0 or string-length(../A_LastName_JointOwn) > 0)">
 													<xsl:attribute name="RelatedObjectID">Party_JointOwn</xsl:attribute>
 												</xsl:when>
-												<xsl:when
-													test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '-1'">
+												<xsl:when test="../*[name()=concat('A_BeneficiarySameAs_BEN',$pos)] = '-1'">
 													<xsl:attribute name="RelatedObjectID">
-													<xsl:value-of
-														select="concat('Party_BEN',$pos)" />
+														<xsl:value-of select="concat('Party_BEN',$pos)" />
 													</xsl:attribute>
 												</xsl:when>
 											</xsl:choose>
@@ -3408,6 +3530,12 @@
 								<xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn ='1' and ./instanceData/TXLife/A_OwnerType = '2' and string-length(./instanceData/TXLife/A_EntityName_OWN)>0 )">
 									<xsl:attribute name="RelatedObjectID">Party_OWN_ENTITY</xsl:attribute>
 								</xsl:if>
+								
+								<!-- BHFD-5857 -->
+								<xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn ='1' and ./instanceData/TXLife/A_OwnerType_OWN = '1009990003' and string-length(./instanceData/TXLife/A_EntityName_OWN)>0 )">
+									<xsl:attribute name="RelatedObjectID">Party_OWN_ENTITY</xsl:attribute>
+								</xsl:if>
+								
 								<xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn ='1' and ./instanceData/TXLife/A_OwnerType = '1' and	(string-length(./instanceData/TXLife/A_FirstName_OWN) > 0 or string-length(./instanceData/TXLife/A_LastName_OWN) > 0))">
 									<xsl:attribute name="RelatedObjectID">Party_OWN</xsl:attribute>
 								</xsl:if>
@@ -3415,14 +3543,14 @@
 							<OriginatingObjectType tc="4">Holding</OriginatingObjectType>
 							<RelatedObjectType tc="6">Party</RelatedObjectType>
 							<RelationRoleCode tc="31">Payor</RelationRoleCode>
-							<xsl:if test="(./instanceData/TXLife/A_PremPayor!='-1')">
-								<xsl:if test="(./instanceData/TXLife/A_PremPayor = '1' and ./instanceData/TXLife/A_OwnOtherThanAnn ='0') ">
+
+								<xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn ='0') ">
 									<RelationDescription tc="91">Self</RelationDescription>
 								</xsl:if>
-								<xsl:if test="(./instanceData/TXLife/A_PremPayor = '1' and ./instanceData/TXLife/A_OwnOtherThanAnn ='1' and ./instanceData/TXLife/A_PRODUCTCODE = '301') ">
-									<RelationDescription tc="2147483647">Other</RelationDescription><!-- Citation Required for GIB --> 
-								</xsl:if>
-								<xsl:if test="(./instanceData/TXLife/A_PremPayor = '3') ">
+								<!-- <xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn ='1' and ./instanceData/TXLife/A_PRODUCTCODE = '301') ">
+									<RelationDescription tc="2147483647">Other</RelationDescription>Citation Required for GIB 
+								</xsl:if> -->
+								<xsl:if test="(./instanceData/TXLife/A_OwnOtherThanAnn = '1')">
 									<xsl:if test="./instanceData/TXLife/A_OwnerType_OWN = '1009990002'">
 										<RelationDescription tc="92">Custodian</RelationDescription>
 									</xsl:if>
@@ -3482,7 +3610,6 @@
 										</xsl:choose>
 									</xsl:if>
 								</xsl:if>
-							</xsl:if>
 						</Relation>
 					<!-- AGT Relation Holding/Party -->
 					<xsl:for-each select="instanceData/TXLife/*">
