@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring accessors="true" comment="Delete 3 elements from project &apos;eAppAutomation&apos;&#x0D;&#x0A;- Original project: &apos;eAppAutomation&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     Execution Report 02_16_2018_163550.html&#x0D;&#x0A;     Execution Report 04_17_2018_175327.html&#x0D;&#x0A;     Execution Report 06_27_2018_002410.html" description="Delete elements" element1="Reports/Execution Report 02_16_2018_163550.html" element2="Reports/Execution Report 04_17_2018_175327.html" element3="Reports/Execution Report 06_27_2018_002410.html" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="3" stamp="1531825489671" subPackages="false" version="1.0"/>
-</session>
