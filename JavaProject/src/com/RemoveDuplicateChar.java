@@ -13,14 +13,17 @@ public class RemoveDuplicateChar {
         String outString = new String();
         Map<Character, Integer> count = new HashMap<Character, Integer>();
         
+        //Converting to a character array
         for(char c: input.toCharArray()) {
         	output.add(c);
         }
         
+      //Converting the Set to String
         for (char c:output) {
         	outString += String.valueOf(c);
         }
         
+      //Checking no of occurance
         for (char c:input.toCharArray()) {
         	if (count.containsKey(c)) {
         		count.put(c,count.get(c)+1);
