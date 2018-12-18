@@ -32,9 +32,9 @@ public class TestGETSample
     	for(int i=0;i<actualObject.length();i++)
     	{
     		System.out.println("Id of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getInt("id"));
-    		System.out.println("Id of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("first_name"));
-    		System.out.println("Id of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("last_name"));
-    		System.out.println("Id of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("avatar"));
+    		System.out.println("First Name of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("first_name"));
+    		System.out.println("Last Name of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("last_name"));
+    		System.out.println("Avatar of " + (i + 1)  + " : " + actualObject.getJSONObject(i).getString("avatar"));
     	}
     }  
 }
