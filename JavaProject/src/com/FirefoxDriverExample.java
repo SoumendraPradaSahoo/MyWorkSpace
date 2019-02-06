@@ -7,8 +7,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public class FirefoxDriverExample {
 
 	public static void main(String[] args) {
-		System.setProperty("webdriver.firefox.marionette", "true");
-		System.setProperty("webdriver.gecko.driver", "D:\\Drivers\\geckodriver.exe");
+		//System.setProperty("webdriver.firefox.marionette", "true");
+		//System.setProperty("webdriver.gecko.driver", "D:\\Drivers\\geckodriver.exe");
 		WebDriver driver = new FirefoxDriver();
 		driver.get("https://www.google.com/");
 		driver.manage().window().maximize();

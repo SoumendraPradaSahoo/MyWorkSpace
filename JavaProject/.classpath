@@ -7,13 +7,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.testng.TESTNG_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/selenium-server-standalone-3.13.0.jar"/>
-	<classpathentry kind="lib" path="D:/lib/activation-2.2.1.jar"/>
-	<classpathentry kind="lib" path="D:/lib/javax.mail.jar"/>
-	<classpathentry kind="lib" path="D:/UCanAccess-4.0.4-bin/ucanaccess-4.0.4.jar"/>
-	<classpathentry kind="lib" path="D:/UCanAccess-4.0.4-bin/lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="D:/UCanAccess-4.0.4-bin/lib/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="D:/UCanAccess-4.0.4-bin/lib/hsqldb.jar"/>
-	<classpathentry kind="lib" path="D:/UCanAccess-4.0.4-bin/lib/jackcess-2.1.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/selenium-server-standalone-3.13.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/lib/activation-2.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/UCanAccess-4.0.4-bin/ucanaccess-4.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/UCanAccess-4.0.4-bin/lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/UCanAccess-4.0.4-bin/lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/UCanAccess-4.0.4-bin/lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ssahoo43/D_Drive/UCanAccess-4.0.4-bin/lib/jackcess-2.1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
