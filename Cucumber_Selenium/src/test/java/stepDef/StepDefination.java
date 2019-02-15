@@ -10,6 +10,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.cucumber.listener.Reporter;
 
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -73,5 +75,13 @@ public class StepDefination {
 		// Write code here that turns the phrase above into concrete actions
 		driver.close();
 		driver.quit();
+	}
+	
+	@After
+	public void afterScenario(Scenario sc) {
+		if (sc.getStatus().equalsIgnoreCase("Passed")) {
+			System.out.println("This scenario is passed: " + sc.getName());
+		}
+			
 	}
 }
