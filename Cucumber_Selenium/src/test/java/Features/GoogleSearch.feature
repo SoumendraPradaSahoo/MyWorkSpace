@@ -1,3 +1,4 @@
+@AllTest
 Feature: Test Search for Google
 
   Background: 

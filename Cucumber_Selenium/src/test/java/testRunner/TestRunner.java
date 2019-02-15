@@ -11,7 +11,7 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
 		features = {"src/test/java/Features"},
 		glue={"stepDef"},
-		tags= {"@RegressionTest"},			
+		tags= {"@AllTest","~@RegressionTest"},			
 		plugin= {"html:target/Report","com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-reports/report.html"}
 		)
 public class TestRunner {	
