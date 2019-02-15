@@ -53,8 +53,8 @@ public class MaxProduct {
 		for(int i=0;i<len;i++) {
 			if(arr[i]>MaxA)
 			{
-				MaxB=MaxA;
 				MaxC=MaxB;
+				MaxB=MaxA;
 				MaxA=arr[i];
 			}
 			else if(arr[i]>MaxB)
