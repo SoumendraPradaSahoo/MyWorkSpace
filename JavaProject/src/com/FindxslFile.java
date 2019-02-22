@@ -13,13 +13,14 @@ public class FindxslFile {
 	}
 	
 	public void getFiles(File fileName) {
+		//done some changes here on GitHub
 		File[] filesinDir = fileName.listFiles();
-		for(File fl: filesinDir) {
-			if(fl.isDirectory()) {
-				getFiles(fl);	
+		for(int i=0;i<filesinDir.length;i++) {
+			if(filesinDir[i].isDirectory()) {
+				getFiles(filesinDir[i]);	
 			}
-			else if(fl.getName().contains(".xlsx"))
-			System.out.println(fl.getAbsolutePath());
+			else if(filesinDir[i].getName().contains(".xlsx"))
+			System.out.println(filesinDir[i].getAbsolutePath());
 		}
 	}
 
