@@ -724,19 +724,34 @@
 										</xsl:if>
 										
 										<!-- BHFD-3168 - removed JtAnnuitantSignatureOK tag -->
-										<!-- <xsl:if test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
 											<JtAnnuitantSignatureOK tc="0">False</JtAnnuitantSignatureOK>
 										</xsl:if>
 										<xsl:if test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
 											<JtAnnuitantSignatureOK tc="1">True</JtAnnuitantSignatureOK>
-										</xsl:if> -->
+										</xsl:if>
 										
+										<xsl:choose>
+										<xsl:when
+											test="./instanceData/TXLife/A_JointAnnInd = '1'">
+										<xsl:if test="./instanceData/TXLife/A_JointAnnSignatureOK = '0'">
+											<JtAppOwnerSignatureOK tc="0">False</JtAppOwnerSignatureOK>
+										</xsl:if>
+										<xsl:if test="./instanceData/TXLife/A_JointAnnSignatureOK = '1'">
+											<JtAppOwnerSignatureOK tc="1">True</JtAppOwnerSignatureOK>
+										</xsl:if>
+										</xsl:when>
+										<xsl:when
+											test="./instanceData/TXLife/A_JointAnnInd != '1'">
 										<xsl:if test="./instanceData/TXLife/A_JointOwnerSignatureOK = '0'">
 											<JtAppOwnerSignatureOK tc="0">False</JtAppOwnerSignatureOK>
 										</xsl:if>
 										<xsl:if test="./instanceData/TXLife/A_JointOwnerSignatureOK = '1'">
 											<JtAppOwnerSignatureOK tc="1">True</JtAppOwnerSignatureOK>
 										</xsl:if>
+										</xsl:when>
+										</xsl:choose>
+										
 									</ApplicationInfoExtension>
 								</OLifEExtension>
 							</ApplicationInfo>
