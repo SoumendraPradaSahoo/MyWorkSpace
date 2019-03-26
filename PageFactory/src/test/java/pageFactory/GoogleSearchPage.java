@@ -23,7 +23,8 @@ public class GoogleSearchPage {
 		public void search(String str) {
 			
 			searchBox.sendKeys(str);
-			searchButton.click();
+			searchBox.submit();
+			//searchButton.click();
 		}
 		
 }
