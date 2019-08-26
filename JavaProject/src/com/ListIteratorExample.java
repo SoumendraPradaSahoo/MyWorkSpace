@@ -19,6 +19,7 @@ public class ListIteratorExample {
 			itr.add("Sudha");
 		}
 		
+		System.out.println("Printing New Iteration");
 		Iterator<String> itr1 = lst.iterator();
 		while(itr1.hasNext())
 		{

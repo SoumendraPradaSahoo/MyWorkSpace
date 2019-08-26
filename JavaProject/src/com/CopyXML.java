@@ -30,6 +30,7 @@ public class CopyXML {
 		System.out.println("\nEnter no. of time you want to copy the files.");
 		try {
 			int noIteration = sc.nextInt();
+			sc.close();
 			if (noIteration==0) {
 				System.out.println("No of Iteration should be greater than 0");
 				return;
