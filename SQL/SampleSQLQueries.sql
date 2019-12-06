@@ -1,6 +1,6 @@
 select * from nbp_PolicyNumber;
 
-select * from nbp_partialsave where policynumber in ('21820001');
+select * from nbp_partialsave where policynumber in ('21910028');
 
 select distinct(status) from nbp_partialsave;
 
